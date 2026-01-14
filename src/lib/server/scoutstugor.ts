@@ -2,86 +2,7 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import type { Scoutstuga, ScoutstugaTyp } from "$lib/scoutstugor";
 
-const CSV_WITH_COORDS_PATH = resolve(
-	process.cwd(),
-	"scoutstugor_stockholms_lan_masterlista_med_koordinater_semikolon.csv",
-);
-const CSV_FALLBACK_PATH = resolve(
-	process.cwd(),
-	"scoutstugor_stockholms_lan_masterlista_semikolon.csv",
-);
-
-function parseSemicolonCsvLine(line: string): string[] {
-	const fields: string[] = [];
-	let current = "";
-	let inQuotes = false;
-
-	for (let index = 0; index < line.length; index += 1) {
-		const character = line[index];
-		if (!character) continue;
-
-		if (inQuotes) {
-			if (character === '"') {
-				const next = line[index + 1];
-				if (next === '"') {
-					current += '"';
-					index += 1;
-					continue;
-				}
-
-				inQuotes = false;
-				continue;
-			}
-
-			current += character;
-			continue;
-		}
-
-		if (character === '"') {
-			inQuotes = true;
-			continue;
-		}
-
-		if (character === ";") {
-			fields.push(current.trim());
-			current = "";
-			continue;
-		}
-
-		current += character;
-	}
-
-	if (inQuotes) {
-		throw new Error('Ogiltig CSV: rad slutar med oavslutat citattecken (").');
-	}
-
-	fields.push(current.trim());
-	return fields;
-}
-
-function getColumnIndex(header: string[], name: string): number {
-	const index = header.indexOf(name);
-	if (index === -1) {
-		throw new Error(
-			`Ogiltig CSV: saknar kolumnen "${name}". Hittade: ${header.join(", ")}`,
-		);
-	}
-	return index;
-}
-
-function getOptionalColumnIndex(header: string[], name: string): number | null {
-	const index = header.indexOf(name);
-	return index === -1 ? null : index;
-}
-
-function slugify(value: string): string {
-	return value
-		.toLowerCase()
-		.normalize("NFKD")
-		.replaceAll(/[\u0300-\u036f]/g, "")
-		.replaceAll(/[^a-z0-9]+/g, "-")
-		.replaceAll(/(^-+|-+$)/g, "");
-}
+const JSON_PATH = resolve(process.cwd(), "data/scoutstugor.stockholm.json");
 
 function extractEmails(value: string): string[] {
 	if (!value) return [];
@@ -91,129 +12,219 @@ function extractEmails(value: string): string[] {
 	return [...new Set(matches.map((email) => email.trim()).filter(Boolean))];
 }
 
-function parseCoordinate(value: string): number | null {
-	const trimmed = value.trim();
-	if (!trimmed) return null;
+type ScoutstugaJson = {
+	id: string;
+	kommun: string;
+	namn: string;
+	organisation: string;
+	typ: ScoutstugaTyp;
+	platsAdress: string;
+	epost: string;
+	telefon: string;
+	ovrigt: string;
+	latitud: number | null;
+	longitud: number | null;
+	koordinatKalla: string;
+	noggrannhet: string;
+	golvytaM2?: number;
+	sangar?: number;
+	el?: boolean;
+	vatten?: boolean;
+	vattenTyp?: "inne" | "pump";
+	toalett?: "inne" | "ute" | "båda" | "ingen";
+	omStuganUrl?: string;
+	karUrl?: string;
+	prisinfo?: string;
+	prisKallaUrl?: string;
+	prisKallaNotering?: string;
+	bokningslank?: string;
+	bokningsKallaUrl?: string;
+	bokningsKallaNotering?: string;
+	senastKontrollerad?: string;
+};
 
-	const normalized = trimmed.replace(",", ".");
-	const parsed = Number.parseFloat(normalized);
-	if (!Number.isFinite(parsed)) return null;
-
-	return parsed;
+function assertString(value: unknown, name: string): asserts value is string {
+	if (typeof value !== "string") {
+		throw new Error(`Ogiltig data: "${name}" måste vara string.`);
+	}
 }
 
-function normalizeFieldCount(
-	fields: string[],
-	expected: number,
-	lineNumber: number,
-): string[] {
-	if (fields.length === expected) return fields;
-
-	if (fields.length < expected) {
-		return [
-			...fields,
-			...Array.from({ length: expected - fields.length }, () => ""),
-		];
+function assertNullableNumber(
+	value: unknown,
+	name: string,
+): asserts value is number | null {
+	if (value === null) return;
+	if (typeof value !== "number" || !Number.isFinite(value)) {
+		throw new Error(`Ogiltig data: "${name}" måste vara number eller null.`);
 	}
-
-	const extras = fields.slice(expected);
-	if (extras.every((value) => value.trim().length === 0)) {
-		return fields.slice(0, expected);
-	}
-
-	throw new Error(
-		`Ogiltig CSV: rad ${lineNumber} har ${fields.length} fält, men header har ${expected}.`,
-	);
 }
 
-export async function loadScoutstugorFromCsv(): Promise<Scoutstuga[]> {
-	let csvText: string;
-	try {
-		csvText = await readFile(CSV_WITH_COORDS_PATH, { encoding: "utf8" });
-	} catch (error) {
-		if (error instanceof Error && "code" in error && error.code === "ENOENT") {
-			csvText = await readFile(CSV_FALLBACK_PATH, { encoding: "utf8" });
-		} else {
-			throw error;
-		}
+function assertOptionalString(
+	value: unknown,
+	name: string,
+): asserts value is string | undefined {
+	if (value === undefined) return;
+	if (typeof value !== "string") {
+		throw new Error(`Ogiltig data: "${name}" måste vara string om angiven.`);
 	}
-	if (csvText.startsWith("\uFEFF")) csvText = csvText.slice(1);
+}
 
-	const lines = csvText
-		.split(/\r?\n/)
-		.map((line: string) => line.trimEnd())
-		.filter((line: string) => line.trim().length > 0);
+function assertOptionalBoolean(
+	value: unknown,
+	name: string,
+): asserts value is boolean | undefined {
+	if (value === undefined) return;
+	if (typeof value !== "boolean") {
+		throw new Error(`Ogiltig data: "${name}" måste vara boolean om angiven.`);
+	}
+}
 
-	if (lines.length === 0) return [];
-
-	const header = parseSemicolonCsvLine(lines[0] ?? "");
-	const kommunIndex = getColumnIndex(header, "Kommun");
-	const namnIndex = getColumnIndex(header, "Namn");
-	const organisationIndex = getColumnIndex(header, "Organisation");
-	const typIndex = getColumnIndex(header, "Typ");
-	const platsAdressIndex = getColumnIndex(header, "Plats_Adress");
-	const epostIndex = getColumnIndex(header, "Epost");
-	const telefonIndex = getColumnIndex(header, "Telefon");
-	const ovrigtIndex = getColumnIndex(header, "Ovrigt");
-	const latitudIndex = getOptionalColumnIndex(header, "Latitud");
-	const longitudIndex = getOptionalColumnIndex(header, "Longitud");
-	const koordinatKallaIndex = getOptionalColumnIndex(header, "Koordinatkälla");
-	const noggrannhetIndex = getOptionalColumnIndex(header, "Noggrannhet");
-
-	const items: Scoutstuga[] = [];
-	const idCounter = new Map<string, number>();
-
-	for (const [lineIndex, line] of lines.slice(1).entries()) {
-		const fields = normalizeFieldCount(
-			parseSemicolonCsvLine(line),
-			header.length,
-			lineIndex + 2,
+function assertOptionalVattenTyp(
+	value: unknown,
+	name: string,
+): asserts value is ScoutstugaJson["vattenTyp"] {
+	if (value === undefined) return;
+	if (typeof value !== "string") {
+		throw new Error(`Ogiltig data: "${name}" måste vara string om angiven.`);
+	}
+	if (value !== "inne" && value !== "pump") {
+		throw new Error(
+			`Ogiltig data: "${name}" måste vara "inne" eller "pump" om angiven.`,
 		);
+	}
+}
 
-		const kommun = fields[kommunIndex] ?? "";
-		const namn = fields[namnIndex] ?? "";
-		const organisation = fields[organisationIndex] ?? "";
-		const typ = (fields[typIndex] ?? "") as ScoutstugaTyp;
-		const platsAdress = fields[platsAdressIndex] ?? "";
-		const epost = fields[epostIndex] ?? "";
-		const telefon = fields[telefonIndex] ?? "";
-		const ovrigt = fields[ovrigtIndex] ?? "";
-		const latitud =
-			latitudIndex === null
-				? null
-				: parseCoordinate(fields[latitudIndex] ?? "");
-		const longitud =
-			longitudIndex === null
-				? null
-				: parseCoordinate(fields[longitudIndex] ?? "");
-		const koordinatKalla =
-			koordinatKallaIndex === null ? "" : (fields[koordinatKallaIndex] ?? "");
-		const noggrannhet =
-			noggrannhetIndex === null ? "" : (fields[noggrannhetIndex] ?? "");
+function assertOptionalNonNegativeNumber(
+	value: unknown,
+	name: string,
+): asserts value is number | undefined {
+	if (value === undefined) return;
+	if (typeof value !== "number" || !Number.isFinite(value) || value < 0) {
+		throw new Error(
+			`Ogiltig data: "${name}" måste vara ett number >= 0 om angiven.`,
+		);
+	}
+}
 
-		const baseId = slugify(`${kommun}-${namn}`);
-		const count = (idCounter.get(baseId) ?? 0) + 1;
-		idCounter.set(baseId, count);
+function assertOptionalToalett(
+	value: unknown,
+	name: string,
+): asserts value is ScoutstugaJson["toalett"] {
+	if (value === undefined) return;
+	if (typeof value !== "string") {
+		throw new Error(`Ogiltig data: "${name}" måste vara string om angiven.`);
+	}
+	if (
+		value !== "inne" &&
+		value !== "ute" &&
+		value !== "båda" &&
+		value !== "ingen"
+	) {
+		throw new Error(
+			`Ogiltig data: "${name}" måste vara en av "inne", "ute", "båda", "ingen" om angiven.`,
+		);
+	}
+}
+
+function validateAndNormalize(raw: unknown): {
+	items: ScoutstugaJson[];
+	uniqueIdCount: number;
+} {
+	if (!Array.isArray(raw)) {
+		throw new Error("Ogiltig data: toppnivån måste vara en array.");
+	}
+
+	const seen = new Set<string>();
+	const items: ScoutstugaJson[] = [];
+
+	for (const [index, value] of raw.entries()) {
+		if (!value || typeof value !== "object") {
+			throw new Error(`Ogiltig data: rad ${index} måste vara ett objekt.`);
+		}
+		const obj = value as Record<string, unknown>;
+
+		assertString(obj.id, "id");
+		assertString(obj.kommun, "kommun");
+		assertString(obj.namn, "namn");
+		assertString(obj.organisation, "organisation");
+		assertString(obj.typ, "typ");
+		assertString(obj.platsAdress, "platsAdress");
+		assertString(obj.epost, "epost");
+		assertString(obj.telefon, "telefon");
+		assertString(obj.ovrigt, "ovrigt");
+		assertNullableNumber(obj.latitud, "latitud");
+		assertNullableNumber(obj.longitud, "longitud");
+		assertString(obj.koordinatKalla, "koordinatKalla");
+		assertString(obj.noggrannhet, "noggrannhet");
+
+		assertOptionalNonNegativeNumber(obj.golvytaM2, "golvytaM2");
+		assertOptionalNonNegativeNumber(obj.sangar, "sangar");
+		assertOptionalBoolean(obj.el, "el");
+		assertOptionalBoolean(obj.vatten, "vatten");
+		assertOptionalVattenTyp(obj.vattenTyp, "vattenTyp");
+		assertOptionalToalett(obj.toalett, "toalett");
+		assertOptionalString(obj.omStuganUrl, "omStuganUrl");
+		assertOptionalString(obj.karUrl, "karUrl");
+
+		assertOptionalString(obj.prisinfo, "prisinfo");
+		assertOptionalString(obj.prisKallaUrl, "prisKallaUrl");
+		assertOptionalString(obj.prisKallaNotering, "prisKallaNotering");
+		assertOptionalString(obj.bokningslank, "bokningslank");
+		assertOptionalString(obj.bokningsKallaUrl, "bokningsKallaUrl");
+		assertOptionalString(obj.bokningsKallaNotering, "bokningsKallaNotering");
+		assertOptionalString(obj.senastKontrollerad, "senastKontrollerad");
+
+		const id = obj.id.trim();
+		if (!id) throw new Error('Ogiltig data: "id" får inte vara tom.');
+		if (seen.has(id)) throw new Error(`Ogiltig data: duplicerat id "${id}".`);
+		seen.add(id);
 
 		items.push({
-			id: count === 1 ? baseId : `${baseId}-${count}`,
-			kommun,
-			namn,
-			organisation,
-			typ,
-			platsAdress,
-			epost,
-			telefon,
-			ovrigt,
-			epostadresser: extractEmails(epost),
-			latitud,
-			longitud,
-			koordinatKalla,
-			noggrannhet,
+			id,
+			kommun: obj.kommun,
+			namn: obj.namn,
+			organisation: obj.organisation,
+			typ: obj.typ as ScoutstugaTyp,
+			platsAdress: obj.platsAdress,
+			epost: obj.epost,
+			telefon: obj.telefon,
+			ovrigt: obj.ovrigt,
+			latitud: obj.latitud,
+			longitud: obj.longitud,
+			koordinatKalla: obj.koordinatKalla,
+			noggrannhet: obj.noggrannhet,
+			golvytaM2: obj.golvytaM2,
+			sangar: obj.sangar,
+			el: obj.el,
+			vatten: obj.vatten,
+			vattenTyp: obj.vattenTyp as ScoutstugaJson["vattenTyp"],
+			toalett: obj.toalett as ScoutstugaJson["toalett"],
+			omStuganUrl: obj.omStuganUrl,
+			karUrl: obj.karUrl,
+			prisinfo: obj.prisinfo,
+			prisKallaUrl: obj.prisKallaUrl,
+			prisKallaNotering: obj.prisKallaNotering,
+			bokningslank: obj.bokningslank,
+			bokningsKallaUrl: obj.bokningsKallaUrl,
+			bokningsKallaNotering: obj.bokningsKallaNotering,
+			senastKontrollerad: obj.senastKontrollerad,
 		});
 	}
 
-	return items.sort((a, b) =>
+	return { items, uniqueIdCount: seen.size };
+}
+
+export async function loadScoutstugor(): Promise<Scoutstuga[]> {
+	const jsonText = await readFile(JSON_PATH, { encoding: "utf8" });
+	const raw = JSON.parse(jsonText) as unknown;
+	const { items } = validateAndNormalize(raw);
+
+	const out: Scoutstuga[] = items.map((item) => ({
+		...item,
+		epostadresser: extractEmails(item.epost),
+	}));
+
+	return out.sort((a, b) =>
 		`${a.kommun}\u0000${a.namn}`.localeCompare(
 			`${b.kommun}\u0000${b.namn}`,
 			"sv",

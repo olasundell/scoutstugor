@@ -1,6 +1,6 @@
-# Deploy till Hostinger (statisk sajt)
+# Deploy / hosting
 
-Det här projektet bygger en statisk sajt till mappen `build/` (ingen server/databas behövs på Hostinger).
+Det här projektet använder nu **SvelteKit + adapter-netlify**, vilket innebär att bygget producerar **serverless-funktioner** (inte en ren statisk sajt).
 
 ## Bygg lokalt
 
@@ -9,21 +9,27 @@ nvm install
 nvm use
 
 bun install
-# eller: bun run build:hostinger
-BASE_PATH=/scoutstugor bun run build
+bun run build
 ```
 
-Efter bygget finns färdiga filer i `build/`.
+Efter bygget finns statiska filer i `build/` och Netlify-funktioner i `.netlify/`.
 
-## Ladda upp till Hostinger
+## Miljövariabler
 
-1. Logga in i Hostinger (hPanel).
-2. Gå till din webbplats → **Files** → **File Manager**.
-3. Öppna webbplatsens dokumentrot (oftast `public_html/`) och skapa/öppna mappen `scoutstugor/`.
-4. Ladda upp innehållet i `build/` (t.ex. `index.html`, `__data.json`, `_app/`, `robots.txt`) till `public_html/scoutstugor/`.
-5. Besök domänen och verifiera att sidan laddar.
+För reseplanering (bil + kollektivtrafik) behövs:
 
-## Om sajten ska ligga i en undermapp
+- `GRAPHHOPPER_API_KEY`
+- `TRAFIKLAB_RESROBOT_ACCESS_ID`
+
+## Hostinger
+
+Om du använder Hostinger “vanligt webbhotell” (endast statiska filer) kan du **inte** köra Node-servern direkt.
+Alternativ:
+
+- Flytta till en plattform som kör Node (t.ex. Render/Fly.io/DigitalOcean App Platform).
+- Eller behåll statisk hosting och lägg API-proxy på t.ex. Cloudflare Workers (inte valt i denna implementation).
+
+## BASE_PATH (undermapp)
 
 Bygg med `BASE_PATH` som matchar undermappen, utan avslutande snedstreck:
 

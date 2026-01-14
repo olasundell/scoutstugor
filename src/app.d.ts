@@ -10,4 +10,9 @@ declare global {
 	}
 }
 
+declare module "$env/static/private" {
+	export const GRAPHHOPPER_API_KEY: string;
+	export const TRAFIKLAB_RESROBOT_ACCESS_ID: string;
+}
+
 export {};

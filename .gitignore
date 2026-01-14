@@ -21,6 +21,12 @@ Thumbs.db
 # Logs
 *.log
 
+# Data exports (we only use JSON)
+*.csv
+
+# Local tooling artifacts
+.playwright-mcp/
+
 # Env
 .env
 .env.*

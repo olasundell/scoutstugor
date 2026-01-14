@@ -19,6 +19,7 @@ let map: LeafletMap | null = null;
 let markersLayer: LayerGroup | null = null;
 let scoutIcon: DivIcon | null = null;
 let didFitBounds = false;
+let lastCoordsCount = 0;
 
 const markersById = new Map<string, Marker>();
 
@@ -82,6 +83,13 @@ function updateMarkers() {
 	}
 }
 
+function countCoords(): number {
+	return stugor.reduce(
+		(acc, s) => acc + (s.latitud !== null && s.longitud !== null ? 1 : 0),
+		0,
+	);
+}
+
 function fitToMarkers() {
 	if (!leaflet || !map) return;
 
@@ -100,6 +108,7 @@ function fitToMarkers() {
 
 onMount(() => {
 	let cancelled = false;
+	let cmdWheelCleanup: (() => void) | null = null;
 
 	async function init() {
 		if (!container) return;
@@ -111,9 +120,9 @@ onMount(() => {
 		scoutIcon = leaflet.divIcon({
 			className: "scoutMarker",
 			html: `<div class="scoutMarkerInner"><img src="${scoutLilja}" alt="" /></div>`,
-			iconSize: [34, 34],
-			iconAnchor: [17, 17],
-			popupAnchor: [0, -17],
+			iconSize: [28, 28],
+			iconAnchor: [14, 14],
+			popupAnchor: [0, -14],
 		});
 
 		map = leaflet.map(container, {
@@ -121,6 +130,48 @@ onMount(() => {
 			zoom: 9,
 			scrollWheelZoom: false,
 		});
+
+		// Cmd/Ctrl + scroll should zoom the map.
+		// Note: Trackpad pinch-to-zoom is often delivered as WheelEvent with ctrlKey=true.
+		// We keep normal scroll-wheel zoom disabled to avoid accidental zooming while scrolling the page.
+		{
+			const el = map.getContainer();
+			let accumulated = 0;
+			let rafPending = false;
+			// Trackpads emit many small deltas; keep this fairly low so pinch/Cmd+scroll feels responsive.
+			const threshold = 20;
+			const onWheel = (event: WheelEvent) => {
+				if (!map) return;
+				if (!event.metaKey && !event.ctrlKey) return; // only Cmd/Ctrl+scroll (or pinch)
+
+				// Prevent browser page zoom while hovering the map.
+				event.preventDefault();
+				// Prevent Leaflet or other listeners from handling this wheel.
+				event.stopPropagation();
+
+				accumulated += event.deltaY;
+				if (rafPending) return;
+				rafPending = true;
+
+				// Accumulate deltas and apply discrete zoom steps once per frame.
+				requestAnimationFrame(() => {
+					rafPending = false;
+					if (!map) return;
+					while (Math.abs(accumulated) >= threshold) {
+						const direction = Math.sign(accumulated);
+						if (direction > 0) map.zoomOut(1, { animate: false });
+						else map.zoomIn(1, { animate: false });
+						accumulated -= direction * threshold;
+					}
+				});
+			};
+			// Capture so we run before Leaflet's own wheel handlers.
+			el.addEventListener("wheel", onWheel, { passive: false, capture: true });
+			cmdWheelCleanup = () =>
+				el.removeEventListener("wheel", onWheel, {
+					capture: true,
+				} as EventListenerOptions);
+		}
 
 		leaflet
 			.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -133,13 +184,17 @@ onMount(() => {
 		markersLayer = leaflet.layerGroup().addTo(map);
 		updateMarkers();
 		fitToMarkers();
-		didFitBounds = true;
+		lastCoordsCount = countCoords();
+		// Only consider "fit done" if we actually had coords to fit.
+		didFitBounds = lastCoordsCount > 0;
 	}
 
 	void init();
 
 	return () => {
 		cancelled = true;
+		cmdWheelCleanup?.();
+		cmdWheelCleanup = null;
 		map?.remove();
 		map = null;
 		markersLayer = null;
@@ -152,10 +207,13 @@ onMount(() => {
 $effect(() => {
 	if (!map || !markersLayer || !leaflet) return;
 	updateMarkers();
-	if (!didFitBounds) {
+	const coordsCount = countCoords();
+	// If we mounted before data arrived (0 coords -> later >0), fit once when coords appear.
+	if (!didFitBounds && coordsCount > 0) {
 		fitToMarkers();
 		didFitBounds = true;
 	}
+	lastCoordsCount = coordsCount;
 });
 
 $effect(() => {
@@ -197,14 +255,21 @@ $effect(() => {
 	border-radius: 999px;
 	display: grid;
 	place-items: center;
-	background: rgba(255, 255, 255, 0.95);
-	border: 2px solid rgba(29, 78, 216, 0.55);
-	box-shadow: 0 10px 18px rgba(15, 23, 42, 0.18);
+	overflow: hidden;
+	background: rgba(255, 255, 255, 0.6);
+	border: 1px solid rgba(29, 78, 216, 0.6);
+	box-shadow: 0 6px 10px rgba(15, 23, 42, 0.14);
+	box-sizing: border-box;
 }
 
 :global(.scoutMarkerInner img) {
-	width: 62%;
-	height: 62%;
+	display: block;
+	width: calc(90% + 1.8px) !important;
+	height: calc(90% + 1.8px) !important;
+	max-width: 100% !important;
+	max-height: 100% !important;
+	object-fit: contain;
+	pointer-events: none;
 }
 
 :global(.popup) {
