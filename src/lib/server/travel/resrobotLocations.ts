@@ -1,4 +1,4 @@
-import { TRAFIKLAB_RESROBOT_ACCESS_ID } from "$env/static/private";
+import { TRAFIKLAB_RESROBOT_ACCESS_ID } from "$env/dynamic/private";
 import type { GeocodeResult } from "$lib/server/travel/graphhopper";
 
 type ResRobotStopLocation = {

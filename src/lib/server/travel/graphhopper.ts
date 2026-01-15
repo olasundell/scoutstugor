@@ -1,4 +1,4 @@
-import { GRAPHHOPPER_API_KEY } from "$env/static/private";
+import { GRAPHHOPPER_API_KEY } from "$env/dynamic/private";
 import type { LatLon } from "$lib/travel/types";
 
 type GraphHopperGeocodeHit = {
