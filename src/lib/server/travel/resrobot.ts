@@ -1,4 +1,4 @@
-import { TRAFIKLAB_RESROBOT_ACCESS_ID } from "$env/dynamic/private";
+import { env } from "$env/dynamic/private";
 import type { LatLon, PublicTransportLeg } from "$lib/travel/types";
 
 type ResRobotTripResponse = {
@@ -58,10 +58,10 @@ type ResRobotNearbyStopsResponse = {
 };
 
 function requireAccessId(): string {
-	if (!TRAFIKLAB_RESROBOT_ACCESS_ID) {
+	if (!env.TRAFIKLAB_RESROBOT_ACCESS_ID) {
 		throw new Error("Missing TRAFIKLAB_RESROBOT_ACCESS_ID");
 	}
-	return TRAFIKLAB_RESROBOT_ACCESS_ID;
+	return env.TRAFIKLAB_RESROBOT_ACCESS_ID;
 }
 
 class ResRobotHttpError extends Error {

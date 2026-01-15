@@ -1,4 +1,4 @@
-import { GRAPHHOPPER_API_KEY } from "$env/dynamic/private";
+import { env } from "$env/dynamic/private";
 import type { LatLon } from "$lib/travel/types";
 
 type GraphHopperGeocodeHit = {
@@ -29,10 +29,10 @@ type GraphHopperMatrixResponse = {
 };
 
 function requireKey(): string {
-	if (!GRAPHHOPPER_API_KEY) {
+	if (!env.GRAPHHOPPER_API_KEY) {
 		throw new Error("Missing GRAPHHOPPER_API_KEY");
 	}
-	return GRAPHHOPPER_API_KEY;
+	return env.GRAPHHOPPER_API_KEY;
 }
 
 export type GeocodeResult = {

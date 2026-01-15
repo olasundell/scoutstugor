@@ -1,4 +1,4 @@
-import { TRAFIKLAB_RESROBOT_ACCESS_ID } from "$env/dynamic/private";
+import { env } from "$env/dynamic/private";
 import type { GeocodeResult } from "$lib/server/travel/graphhopper";
 
 type ResRobotStopLocation = {
@@ -46,7 +46,7 @@ export async function resrobotLocationNameGeocode(
 	query: string,
 	limit = 5,
 ): Promise<GeocodeResult[]> {
-	const accessId = (TRAFIKLAB_RESROBOT_ACCESS_ID || "").trim();
+	const accessId = (env.TRAFIKLAB_RESROBOT_ACCESS_ID || "").trim();
 	if (!accessId) return [];
 
 	const maxNo = Math.max(1, Math.min(10, limit));

@@ -118,19 +118,6 @@ const activeAdvancedCount = $derived.by(() => {
 	return count;
 });
 
-function formatYesNo(value: boolean): string {
-	return value ? "Ja" : "Nej";
-}
-
-function formatToalett(
-	value: NonNullable<PageData["stugor"][number]["toalett"]>,
-): string {
-	if (value === "inne") return "Inne";
-	if (value === "ute") return "Ute";
-	if (value === "båda") return "Båda";
-	return "Ingen";
-}
-
 function facilityTokens(stuga: PageData["stugor"][number]): string[] {
 	const tokens: string[] = [];
 	if (typeof stuga.golvytaM2 === "number")
@@ -146,17 +133,6 @@ function facilityTokens(stuga: PageData["stugor"][number]): string[] {
 		if (stuga.toalett === "ute") tokens.push("utedass");
 	}
 	return tokens;
-}
-
-function facilitySummary(stuga: PageData["stugor"][number]): string | null {
-	const parts: string[] = [];
-	if (typeof stuga.golvytaM2 === "number") parts.push(`${stuga.golvytaM2} m²`);
-	if (typeof stuga.sangar === "number") parts.push(`${stuga.sangar} sängar`);
-	if (typeof stuga.el === "boolean") parts.push(`El: ${formatYesNo(stuga.el)}`);
-	if (typeof stuga.vatten === "boolean")
-		parts.push(`Vatten: ${formatYesNo(stuga.vatten)}`);
-	if (stuga.toalett) parts.push(`Toalett: ${formatToalett(stuga.toalett)}`);
-	return parts.length ? parts.join(" · ") : null;
 }
 
 function facilityIcons(
@@ -549,7 +525,6 @@ function formatDuration(ms: number): string {
 	{:else}
 		<ul class="list" aria-label="Scoutstugor">
 			{#each displayed as stuga (stuga.id)}
-				{@const facilities = facilitySummary(stuga)}
 				{@const icons = facilityIcons(stuga)}
 				<li class="card">
 					<div class="cardHeader">
@@ -584,13 +559,6 @@ function formatDuration(ms: number): string {
 					{/if}
 					{#if stuga.platsAdress}
 						<p class="meta"><span class="metaLabel">Plats/adress</span> {stuga.platsAdress}</p>
-					{/if}
-
-					{#if facilities}
-						<p class="meta">
-							<span class="metaLabel">Storlek</span>
-							<span>{facilities}</span>
-						</p>
 					{/if}
 
 					{#if stuga.omStuganUrl || stuga.karUrl}

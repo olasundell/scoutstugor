@@ -1,4 +1,7 @@
 <script lang="ts">
+import { onMount } from "svelte";
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
 import type { Scoutstuga } from "$lib/scoutstugor";
 import type { GeocodeResult } from "$lib/server/travel/graphhopper";
 import { DEFAULT_PT_ORIGIN } from "$lib/travel/defaultOrigins";
@@ -45,6 +48,8 @@ let ptResults = $state<GeocodeResult[]>([]);
 let ptSearchLoading = $state(false);
 let ptDebounce: ReturnType<typeof setTimeout> | null = null;
 let departLocal = $state(defaultDepartLocal());
+let departInput = $state<HTMLInputElement | null>(null);
+let departPicker: flatpickr.Instance | null = null;
 
 let loading = $state(false);
 let error = $state<string | null>(null);
@@ -139,6 +144,45 @@ $effect(() => {
 	ptDebounce = setTimeout(() => {
 		void searchGeocode(q);
 	}, 250);
+});
+
+const handleKeydown = (event: KeyboardEvent) => {
+	if (event.key !== "Escape") return;
+	if (!open) return;
+	event.preventDefault();
+	open = false;
+};
+
+onMount(() => {
+	window.addEventListener("keydown", handleKeydown);
+	if (!departInput) return;
+	departPicker = flatpickr(departInput, {
+		enableTime: true,
+		time_24hr: true,
+		dateFormat: "Y-m-d H:i",
+		defaultDate: departLocal,
+		allowInput: true,
+		onChange: (_dates, dateStr) => {
+			departLocal = dateStr;
+		},
+	});
+
+	return () => {
+		window.removeEventListener("keydown", handleKeydown);
+		departPicker?.destroy();
+		departPicker = null;
+	};
+});
+
+$effect(() => {
+	if (!departPicker) return;
+	const current = departPicker.input.value;
+	if (departLocal && current !== departLocal) {
+		departPicker.setDate(departLocal, false);
+	}
+	if (!departLocal && current) {
+		departPicker.clear();
+	}
 });
 
 async function computeBatch() {
@@ -239,10 +283,10 @@ async function computeBatch() {
 				<input
 					id="departAtBatch"
 					class="input inputIso"
-					type="datetime-local"
-					step="60"
+					type="text"
 					autocomplete="off"
 					aria-label="Avresetid"
+					bind:this={departInput}
 					bind:value={departLocal}
 					onblur={() => {
 						const parsed = parseIsoLocalDatetime(departLocal);

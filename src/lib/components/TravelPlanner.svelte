@@ -1,4 +1,7 @@
 <script lang="ts">
+import { onMount } from "svelte";
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
 import type { Scoutstuga } from "$lib/scoutstugor";
 import type { GeocodeResult } from "$lib/server/travel/graphhopper";
 import {
@@ -51,11 +54,90 @@ let carDebounce: ReturnType<typeof setTimeout> | null = null;
 let ptDebounce: ReturnType<typeof setTimeout> | null = null;
 
 let departLocal = $state(defaultDepartLocal());
+let departInput = $state<HTMLInputElement | null>(null);
+let departPicker: flatpickr.Instance | null = null;
 
 // Result
 let loading = $state(false);
 let error = $state<string | null>(null);
 let result = $state<TravelResponse | null>(null);
+
+const resultsVm = $derived.by(() => {
+	const departAt = parseIsoLocalDatetime(departLocal);
+	if (!result) return null;
+
+	const carArriveAtIso =
+		departAt ? new Date(departAt.getTime() + result.car.durationMs).toISOString() : null;
+	const carDepartAtIso = departAt ? departAt.toISOString() : null;
+
+	let walkDurationMs = 0;
+	let walkDistanceM = 0;
+	for (const leg of result.pt.legs) {
+		if (leg.kind !== "walk") continue;
+		if (typeof leg.durationMs === "number" && Number.isFinite(leg.durationMs))
+			walkDurationMs += leg.durationMs;
+		if (typeof leg.distanceM === "number" && Number.isFinite(leg.distanceM))
+			walkDistanceM += leg.distanceM;
+	}
+
+	const diffMs = result.pt.durationMs - result.car.durationMs; // + => car faster
+	const fastest =
+		Math.abs(diffMs) < 60_000 ? "tie" : diffMs > 0 ? "car" : "pt";
+
+	const deltaText =
+		fastest === "tie"
+			? "Likvärdiga restider"
+			: fastest === "car"
+				? `Bil är ${formatDuration(diffMs)} snabbare`
+				: `Kollektivtrafik är ${formatDuration(-diffMs)} snabbare`;
+
+	return {
+		carDepartAtIso,
+		carArriveAtIso,
+		walkDurationMs,
+		walkDistanceM,
+		fastest,
+		deltaText,
+	};
+});
+
+const handleKeydown = (event: KeyboardEvent) => {
+	if (event.key !== "Escape") return;
+	event.preventDefault();
+	onClose();
+};
+
+onMount(() => {
+	window.addEventListener("keydown", handleKeydown);
+	if (!departInput) return;
+	departPicker = flatpickr(departInput, {
+		enableTime: true,
+		time_24hr: true,
+		dateFormat: "Y-m-d H:i",
+		defaultDate: departLocal,
+		allowInput: true,
+		onChange: (_dates, dateStr) => {
+			departLocal = dateStr;
+		},
+	});
+
+	return () => {
+		window.removeEventListener("keydown", handleKeydown);
+		departPicker?.destroy();
+		departPicker = null;
+	};
+});
+
+$effect(() => {
+	if (!departPicker) return;
+	const current = departPicker.input.value;
+	if (departLocal && current !== departLocal) {
+		departPicker.setDate(departLocal, false);
+	}
+	if (!departLocal && current) {
+		departPicker.clear();
+	}
+});
 
 function defaultDepartLocal(): string {
 	const now = new Date();
@@ -351,10 +433,10 @@ async function compute() {
 				<input
 					id="departAt"
 					class="input inputIso"
-					type="datetime-local"
-					step="60"
+					type="text"
 					autocomplete="off"
 					aria-label="Avresetid"
+					bind:this={departInput}
 					bind:value={departLocal}
 					onblur={() => {
 						const parsed = parseIsoLocalDatetime(departLocal);
@@ -465,97 +547,155 @@ async function compute() {
 			{/if}
 
 			{#if result}
-				<div class="resultGrid" aria-label="Resultat">
-					<div class="resultCard">
-						<div class="resultTitle">Bil (ledare)</div>
-						<div class="resultValue">{formatDuration(result.car.durationMs)}</div>
-						<div class="resultMeta">{formatKm(result.car.distanceM)}</div>
-						{#if result.deepLinks.carGoogleMaps}
-							<a class="linkBtn" href={result.deepLinks.carGoogleMaps} target="_blank" rel="noreferrer">
-								Öppna rutt
-							</a>
-						{/if}
+				<section class="resultWrap" aria-label="Resultat">
+					<div class="resultSummary">
+						<div class="resultSummaryTop">
+							<div>
+								<div class="resultKicker">Reseöversikt</div>
+								<div class="resultHeadline">{stuga.platsAdress || stuga.namn}</div>
+								<div class="resultSub">
+									Avgång {formatClock(resultsVm?.carDepartAtIso ?? result.pt.departAt)}
+									{#if resultsVm?.deltaText}
+										<span class="sep" aria-hidden="true">·</span>
+										<span>{resultsVm.deltaText}</span>
+									{/if}
+								</div>
+							</div>
+						</div>
+						<dl class="summaryGrid">
+							<div>
+								<dt>Bil (ledare)</dt>
+								<dd>{carSelected?.label ?? "—"}</dd>
+							</div>
+							<div>
+								<dt>Grupp (kollektivtrafik)</dt>
+								<dd>{ptSelected?.label ?? "—"}</dd>
+							</div>
+							<div>
+								<dt>Mål</dt>
+								<dd>{stuga.platsAdress || stuga.namn}</dd>
+							</div>
+						</dl>
 					</div>
 
-					<div class="journeyCard" aria-label="Kollektivtrafik (gruppen)">
-						<div class="journeyHeader">
-							<div class="journeyTitle">Kollektivtrafik (gruppen)</div>
-							<div class="journeyTimes" aria-label="Avgång och ankomst">
+					<div class="compareGrid" aria-label="Jämförelse">
+						<div class={`compareCard ${resultsVm?.fastest === "car" ? "isFastest" : ""}`}>
+							<div class="compareHeader">
+								<div class="compareTitle">Bil (ledare)</div>
+								{#if resultsVm?.fastest === "car"}
+									<span class="badge">Snabbast</span>
+								{:else if resultsVm?.fastest === "tie"}
+									<span class="badge badgeNeutral">Likvärdigt</span>
+								{/if}
+							</div>
+							<div class="compareValue">{formatDuration(result.car.durationMs)}</div>
+							<div class="compareMeta">
+								<div>Avgång: {formatClock(resultsVm?.carDepartAtIso ?? null)}</div>
+								<div>Ankomst: {formatClock(resultsVm?.carArriveAtIso ?? null)}</div>
+								<div>{formatKm(result.car.distanceM)}</div>
+							</div>
+							{#if result.deepLinks.carGoogleMaps}
+								<a class="linkBtn" href={result.deepLinks.carGoogleMaps} target="_blank" rel="noreferrer">
+									Öppna rutt
+								</a>
+							{/if}
+						</div>
+
+						<div class={`compareCard ${resultsVm?.fastest === "pt" ? "isFastest" : ""}`}>
+							<div class="compareHeader">
+								<div class="compareTitle">Kollektivtrafik (gruppen)</div>
+								{#if resultsVm?.fastest === "pt"}
+									<span class="badge">Snabbast</span>
+								{:else if resultsVm?.fastest === "tie"}
+									<span class="badge badgeNeutral">Likvärdigt</span>
+								{/if}
+							</div>
+							<div class="compareValue">{formatDuration(result.pt.durationMs)}</div>
+							<div class="compareMeta">
+								<div>Avgång: {formatClock(result.pt.departAt)}</div>
+								<div>Ankomst: {formatClock(result.pt.arriveAt)}</div>
+								{#if result.pt.changes !== null}
+									<div>Byten: {result.pt.changes}</div>
+								{/if}
+								{#if resultsVm && (resultsVm.walkDurationMs > 0 || resultsVm.walkDistanceM > 0)}
+									<div>
+										Gång:
+										{#if resultsVm.walkDurationMs > 0}
+											<span>{formatDuration(resultsVm.walkDurationMs)}</span>
+										{/if}
+										{#if resultsVm.walkDistanceM > 0}
+											{#if resultsVm.walkDurationMs > 0}<span class="sep">·</span>{/if}
+											<span>{formatWalkDistance(resultsVm.walkDistanceM)}</span>
+										{/if}
+									</div>
+								{/if}
+							</div>
+							{#if result.deepLinks.ptSl}
+								<a class="linkBtn" href={result.deepLinks.ptSl} target="_blank" rel="noreferrer">
+									Öppna i SL
+								</a>
+							{/if}
+						</div>
+					</div>
+
+					<div class="ptDetails" aria-label="Kollektivtrafik, steg för steg">
+						<div class="ptDetailsHeader">
+							<div class="ptDetailsTitle">Kollektivtrafik, steg för steg</div>
+							<div class="ptDetailsMeta">
 								<span class="clock">{formatClock(result.pt.departAt)}</span>
 								<span class="arrow" aria-hidden="true">→</span>
 								<span class="clock">{formatClock(result.pt.arriveAt)}</span>
 							</div>
 						</div>
 
-						<div class="journeyMeta">
-							<span class="journeyDuration">{formatDuration(result.pt.durationMs)}</span>
-							{#if result.pt.changes !== null}
-								<span class="journeyChanges">Byten: {result.pt.changes}</span>
-							{/if}
-						</div>
-
 						{#if result.pt.legs.length > 0}
-							<div class="chipRow" aria-label="Delresor">
+							<ol class="ptTimeline" aria-label="Delresor">
 								{#each result.pt.legs as leg, idx (idx)}
-									{#if idx > 0}<span class="chipSep" aria-hidden="true">•</span>{/if}
-									<span class={`chip ${ptChipClass(leg)}`}>{ptChipText(leg)}</span>
-								{/each}
-							</div>
+									<li class="ptLeg">
+										<div class="ptLegTime" aria-label="Tider">
+											<div class="ptTime">{formatClock(leg.departAt)}</div>
+											<div class="ptTime ptTimeMuted">{formatClock(leg.arriveAt)}</div>
+										</div>
 
-							<details class="journeyDetails">
-								<summary>Detaljer</summary>
-								<ol class="legs" aria-label="Delresor, detaljer">
-									{#each result.pt.legs as leg, idx (idx)}
-										<li class="legRow">
-											<div class="legLeft" aria-label="Tider">
-												<div class="legTime">{formatClock(leg.departAt)}</div>
-												<div class="legTime legTimeMuted">{formatClock(leg.arriveAt)}</div>
-											</div>
-
-											<div class="legBody">
-												<div class="legTop">
-													<span class={`chip chipSmall ${ptChipClass(leg)}`}>{ptChipText(leg)}</span>
-													{#if leg.kind === "transit" && leg.direction}
-														<span class="legDirection">mot {leg.direction}</span>
-													{/if}
-												</div>
-
-												<div class="legStops">
-													<div class="legStop">
-														<span class="dot" aria-hidden="true"></span>
-														<span>{leg.fromName ?? "Start"}</span>
-													</div>
-													<div class="legStop">
-														<span class="dot dotMuted" aria-hidden="true"></span>
-														<span>{leg.toName ?? "Mål"}</span>
-													</div>
-												</div>
-
-												{#if leg.kind === "walk"}
-													<div class="legHint">
-														{#if leg.durationMs !== null}
-															<span>{Math.round(leg.durationMs / 60_000)} min</span>
-														{/if}
-														{#if leg.distanceM !== null}
-															{#if leg.durationMs !== null}<span class="sep">·</span>{/if}
-															<span>{formatWalkDistance(leg.distanceM)}</span>
-														{/if}
-													</div>
+										<div class="ptLegBody">
+											<div class="ptLegTop">
+												<span class={`chip chipSmall ${ptChipClass(leg)}`}>{ptChipText(leg)}</span>
+												{#if leg.kind === "transit" && leg.direction}
+													<span class="ptDirection">mot {leg.direction}</span>
 												{/if}
 											</div>
-										</li>
-									{/each}
-								</ol>
-							</details>
-						{/if}
 
-						{#if result.deepLinks.ptSl}
-							<a class="linkBtn" href={result.deepLinks.ptSl} target="_blank" rel="noreferrer">
-								Öppna i SL
-							</a>
+											<div class="ptStops">
+												<div class="ptStop">
+													<span class="dot" aria-hidden="true"></span>
+													<span>{leg.fromName ?? "Start"}</span>
+												</div>
+												<div class="ptStop">
+													<span class="dot dotMuted" aria-hidden="true"></span>
+													<span>{leg.toName ?? "Mål"}</span>
+												</div>
+											</div>
+
+											{#if leg.kind === "walk"}
+												<div class="ptHint">
+													{#if leg.durationMs !== null}
+														<span>{Math.round(leg.durationMs / 60_000)} min</span>
+													{/if}
+													{#if leg.distanceM !== null}
+														{#if leg.durationMs !== null}<span class="sep">·</span>{/if}
+														<span>{formatWalkDistance(leg.distanceM)}</span>
+													{/if}
+												</div>
+											{/if}
+										</div>
+									</li>
+								{/each}
+							</ol>
+						{:else}
+							<div class="hint">Inga delresor att visa.</div>
 						{/if}
 					</div>
-				</div>
+				</section>
 			{/if}
 		</div>
 	{/if}
@@ -784,6 +924,249 @@ async function compute() {
 		font-weight: 800;
 	}
 
+	.resultWrap {
+		display: grid;
+		gap: 16px;
+	}
+
+	.resultSummary {
+		border: 1px solid rgba(148, 163, 184, 0.35);
+		border-radius: 16px;
+		padding: 14px 16px;
+		background: rgba(255, 255, 255, 0.78);
+		display: grid;
+		gap: 12px;
+	}
+
+	.resultSummaryTop {
+		display: flex;
+		justify-content: space-between;
+		gap: 12px;
+		align-items: flex-start;
+	}
+
+	.resultKicker {
+		font-size: 12px;
+		font-weight: 900;
+		letter-spacing: 0.02em;
+		color: #1d4ed8;
+	}
+
+	.resultHeadline {
+		font-size: 16px;
+		font-weight: 1000;
+		letter-spacing: -0.01em;
+		color: #0f172a;
+	}
+
+	.resultSub {
+		font-size: 13px;
+		color: #475569;
+		display: flex;
+		gap: 6px;
+		flex-wrap: wrap;
+		align-items: center;
+	}
+
+	.summaryGrid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 10px;
+		margin: 0;
+	}
+
+	.summaryGrid dt {
+		font-size: 11px;
+		font-weight: 900;
+		letter-spacing: 0.02em;
+		color: #64748b;
+	}
+
+	.summaryGrid dd {
+		margin: 4px 0 0;
+		font-size: 13px;
+		font-weight: 800;
+		color: #0f172a;
+	}
+
+	.compareGrid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 12px;
+	}
+
+	.compareCard {
+		border: 1px solid rgba(148, 163, 184, 0.35);
+		border-radius: 16px;
+		padding: 14px 14px 12px;
+		background: rgba(255, 255, 255, 0.78);
+		display: grid;
+		gap: 8px;
+	}
+
+	.compareCard.isFastest {
+		border-color: rgba(37, 99, 235, 0.6);
+		box-shadow: 0 10px 24px rgba(37, 99, 235, 0.14);
+	}
+
+	.compareHeader {
+		display: flex;
+		justify-content: space-between;
+		gap: 10px;
+		align-items: center;
+	}
+
+	.compareTitle {
+		font-size: 12px;
+		font-weight: 900;
+		color: #334155;
+		letter-spacing: 0.02em;
+	}
+
+	.compareValue {
+		font-size: 22px;
+		font-weight: 1000;
+		letter-spacing: -0.02em;
+		color: #0f172a;
+	}
+
+	.compareMeta {
+		display: grid;
+		gap: 4px;
+		font-size: 13px;
+		color: #475569;
+	}
+
+	.badge {
+		border-radius: 999px;
+		padding: 4px 10px;
+		font-size: 11px;
+		font-weight: 900;
+		background: rgba(37, 99, 235, 0.12);
+		color: #1d4ed8;
+		border: 1px solid rgba(37, 99, 235, 0.3);
+	}
+
+	.badgeNeutral {
+		background: rgba(15, 23, 42, 0.06);
+		color: #334155;
+		border-color: rgba(15, 23, 42, 0.18);
+	}
+
+	.ptDetails {
+		border: 1px solid rgba(148, 163, 184, 0.35);
+		border-radius: 16px;
+		padding: 14px 14px 12px;
+		background: rgba(255, 255, 255, 0.78);
+		display: grid;
+		gap: 12px;
+	}
+
+	.ptDetailsHeader {
+		display: flex;
+		justify-content: space-between;
+		gap: 12px;
+		align-items: baseline;
+	}
+
+	.ptDetailsTitle {
+		font-size: 13px;
+		font-weight: 900;
+		color: #334155;
+		letter-spacing: 0.02em;
+	}
+
+	.ptDetailsMeta {
+		display: inline-flex;
+		gap: 8px;
+		align-items: center;
+		font-weight: 1000;
+		letter-spacing: -0.02em;
+		color: #0f172a;
+	}
+
+	.ptTimeline {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		gap: 10px;
+	}
+
+	.ptLeg {
+		display: grid;
+		grid-template-columns: 64px 1fr;
+		gap: 12px;
+		align-items: start;
+		padding: 10px 12px;
+		border-radius: 12px;
+		background: rgba(15, 23, 42, 0.04);
+	}
+
+	.ptLegTime {
+		display: grid;
+		gap: 4px;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.ptTime {
+		font-weight: 1000;
+		color: #0f172a;
+	}
+
+	.ptTimeMuted {
+		font-weight: 800;
+		color: #64748b;
+	}
+
+	.ptLegBody {
+		display: grid;
+		gap: 6px;
+		min-width: 0;
+	}
+
+	.ptLegTop {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+
+	.ptDirection {
+		color: #475569;
+		font-weight: 800;
+		font-size: 13px;
+	}
+
+	.ptStops {
+		display: grid;
+		gap: 4px;
+		color: #0f172a;
+		font-size: 13px;
+	}
+
+	.ptStop {
+		display: grid;
+		grid-template-columns: 10px 1fr;
+		gap: 8px;
+		align-items: center;
+		min-width: 0;
+	}
+
+	.ptHint {
+		color: #64748b;
+		font-size: 12px;
+		font-weight: 800;
+		display: inline-flex;
+		gap: 6px;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+
+	.sep {
+		color: rgba(100, 116, 139, 0.9);
+	}
+
 	.resultGrid {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -936,12 +1319,6 @@ async function compute() {
 		background: rgba(255, 255, 255, 0.7);
 	}
 
-	.journeyDetails summary {
-		cursor: pointer;
-		font-weight: 900;
-		color: #0f172a;
-	}
-
 	.legs {
 		list-style: none;
 		padding: 10px 0 0;
@@ -1060,6 +1437,19 @@ async function compute() {
 	@media (max-width: 720px) {
 		.searchRow {
 			grid-template-columns: 1fr;
+		}
+		.summaryGrid {
+			grid-template-columns: 1fr;
+		}
+		.compareGrid {
+			grid-template-columns: 1fr;
+		}
+		.ptDetailsHeader {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+		.ptLeg {
+			grid-template-columns: 56px 1fr;
 		}
 		.resultGrid {
 			grid-template-columns: 1fr;
