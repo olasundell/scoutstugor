@@ -1,6 +1,9 @@
 import { isAbsolute, resolve } from "node:path";
 
-const DEFAULT_DATA_FILES = ["data/scoutstugor.stockholm.json"];
+const DEFAULT_DATA_FILES = [
+	"data/scoutstugor.stockholm.json",
+	"data/scoutstugor.sverige.json",
+];
 
 function splitEnvList(value?: string): string[] {
 	if (!value) return [];

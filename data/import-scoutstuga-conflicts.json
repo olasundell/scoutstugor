@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-01-16T13:06:46.756Z",
+  "outputPath": "/Users/olasundell/code/own/scoutstuga/data/scoutstugor.sverige.json",
+  "totalIncoming": 80,
+  "existingCount": 80,
+  "conflictCount": 2,
+  "resolvedCount": 2,
+  "unresolvedCount": 0,
+  "removedCount": 0,
+  "collisionCount": 0,
+  "conflicts": [],
+  "resolvedConflicts": [
+    {
+      "id": "scoutstuga-164806873446087",
+      "diffs": [
+        {
+          "key": "platsAdress",
+          "existing": "Norra Fogdarödsvägen, 243 93 Klevahill",
+          "incoming": "Norra Fogdarödsvägen, 243 93 Fogdaröd",
+          "resolution": "keepExisting"
+        }
+      ]
+    },
+    {
+      "id": "scoutstuga-162022926825600",
+      "diffs": [
+        {
+          "key": "platsAdress",
+          "existing": "Lönnhässlevägen, Ängelholms kommun",
+          "incoming": "Lönnhässlevägen, Lönnhässle",
+          "resolution": "keepExisting"
+        }
+      ]
+    }
+  ],
+  "removedIds": [],
+  "idCollisions": [],
+  "resolutionsPath": "/Users/olasundell/code/own/scoutstuga/data/import-scoutstuga-resolutions.json"
+}

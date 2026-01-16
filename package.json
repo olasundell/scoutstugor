@@ -23,6 +23,7 @@
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:install": "bunx playwright install chromium",
     "data:validate": "bun scripts/validate-scoutstugor.ts",
+    "data:import:scoutstuga": "node scripts/import-scoutstuga.mjs",
     "pris:recheck": "bun scripts/pris-recheck.ts",
     "avstand:poi": "bun scripts/avstand-poi.ts"
   },

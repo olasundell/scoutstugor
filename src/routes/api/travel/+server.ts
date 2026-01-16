@@ -1,14 +1,25 @@
 import { json } from "@sveltejs/kit";
 import { graphhopperCarRoute } from "$lib/server/travel/graphhopper";
+import { openRouteServiceHikeRoute } from "$lib/server/travel/openRouteService";
 import { resrobotTrip } from "$lib/server/travel/resrobot";
 import { bucketIsoDateTime, TtlCache } from "$lib/server/ttlCache";
-import type { TravelRequest, TravelResponse } from "$lib/travel/types";
+import type {
+	CarTravelResult,
+	HikeTravelResult,
+	PublicTransportResult,
+	TravelDirectResponse,
+	TravelRequest,
+	TravelResponse,
+} from "$lib/travel/types";
 
-const carCache = new TtlCache<string, TravelResponse["car"]>({
+const carCache = new TtlCache<string, CarTravelResult>({
 	defaultTtlMs: 60 * 60_000,
 });
-const ptCache = new TtlCache<string, TravelResponse["pt"]>({
+const ptCache = new TtlCache<string, PublicTransportResult>({
 	defaultTtlMs: 5 * 60_000,
+});
+const hikeCache = new TtlCache<string, HikeTravelResult>({
+	defaultTtlMs: 6 * 60 * 60_000,
 });
 
 function isFiniteNumber(value: unknown): value is number {
@@ -43,15 +54,68 @@ export const POST = async ({ request, url }) => {
 		return json({ error: "Invalid mode" }, { status: 400 });
 	}
 
-	// Hiking is reserved for later
-	if (body.mode === "hike") {
-		return json({ error: "Hiking mode not implemented yet" }, { status: 501 });
+	const destination = validateLatLon(body.destination);
+	if (!destination) {
+		return json({ error: "Invalid coordinates" }, { status: 400 });
 	}
 
-	const destination = validateLatLon(body.destination);
+	if (body.mode === "hike") {
+		const hikeOrigin = validateLatLon(body.hikeOrigin);
+		if (!hikeOrigin) {
+			return json({ error: "Invalid hikeOrigin" }, { status: 400 });
+		}
+
+		const hikeKey = `hike:${hikeOrigin.lat},${hikeOrigin.lon}->${destination.lat},${destination.lon}`;
+		try {
+			const cached = hikeCache.get(hikeKey);
+			const hike =
+				cached ??
+				(await openRouteServiceHikeRoute(hikeOrigin, destination).then(
+					(result) => {
+						hikeCache.set(hikeKey, result);
+						return result;
+					},
+				));
+
+			const destinationLabel =
+				typeof body.destinationLabel === "string"
+					? body.destinationLabel
+					: undefined;
+			const hikeOriginLabel =
+				body.originLabels && typeof body.originLabels.hike === "string"
+					? body.originLabels.hike
+					: undefined;
+
+			const response: TravelResponse = {
+				mode: "hike",
+				hike,
+				deepLinks: {
+					hikeGoogleMaps: `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(
+						hikeOriginLabel ?? `${hikeOrigin.lat},${hikeOrigin.lon}`,
+					)}&destination=${encodeURIComponent(
+						destinationLabel ?? `${destination.lat},${destination.lon}`,
+					)}&travelmode=walking`,
+				},
+			};
+
+			return json(response, {
+				headers: {
+					"cache-control": "private, max-age=60",
+				},
+			});
+		} catch (error) {
+			return json(
+				{
+					error: error instanceof Error ? error.message : "Unknown error",
+				},
+				{ status: 500 },
+			);
+		}
+	}
+
 	const carOrigin = validateLatLon(body.carOrigin);
 	const ptOrigin = validateLatLon(body.ptOrigin);
-	if (!destination || !carOrigin || !ptOrigin) {
+	if (!carOrigin || !ptOrigin) {
 		return json({ error: "Invalid coordinates" }, { status: 400 });
 	}
 
@@ -104,8 +168,8 @@ export const POST = async ({ request, url }) => {
 		const slTo = destinationLabel ?? `${destination.lat},${destination.lon}`;
 
 		const base = url.origin;
-		const response: TravelResponse = {
-			mode: body.mode,
+		const response: TravelDirectResponse = {
+			mode: "direct",
 			car,
 			pt,
 			deepLinks: {

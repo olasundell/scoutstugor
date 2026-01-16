@@ -1,11 +1,13 @@
 import { expect, test } from "@playwright/test";
+import { resolveRegionLabel } from "./utils/scoutstugor";
 
 test("opens detail card from map marker and toggles modals", async ({
 	page,
 }) => {
 	await page.goto("/");
+	const regionLabel = resolveRegionLabel();
 	await expect(
-		page.getByRole("heading", { name: "Scoutstugor i Stockholms län" }),
+		page.getByRole("heading", { name: `Scoutstugor i ${regionLabel}` }),
 	).toBeVisible();
 
 	await page.locator(".leaflet-marker-icon").first().waitFor();

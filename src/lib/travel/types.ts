@@ -1,9 +1,9 @@
 export type LatLon = { lat: number; lon: number };
 
-export type TravelMode = "direct" | "hike"; // hike is reserved for later
+export type TravelMode = "direct" | "hike";
 
-export type TravelRequest = {
-	mode: TravelMode;
+export type TravelRequestDirect = {
+	mode: "direct";
 	destination: LatLon;
 	carOrigin: LatLon;
 	ptOrigin: LatLon;
@@ -14,6 +14,19 @@ export type TravelRequest = {
 	};
 	destinationLabel?: string;
 };
+
+export type TravelRequestHike = {
+	mode: "hike";
+	destination: LatLon;
+	hikeOrigin: LatLon;
+	departAt?: string; // optional for hiking
+	originLabels?: {
+		hike?: string;
+	};
+	destinationLabel?: string;
+};
+
+export type TravelRequest = TravelRequestDirect | TravelRequestHike;
 
 export type CarTravelResult = {
 	durationMs: number;
@@ -56,8 +69,22 @@ export type PublicTransportResult = {
 	legs: PublicTransportLeg[];
 };
 
-export type TravelResponse = {
-	mode: TravelMode;
+export type HikeProfilePoint = {
+	distanceM: number;
+	elevationM: number;
+};
+
+export type HikeTravelResult = {
+	durationMs: number;
+	distanceM: number;
+	ascentM: number;
+	descentM: number;
+	route: LatLon[];
+	profile: HikeProfilePoint[];
+};
+
+export type TravelDirectResponse = {
+	mode: "direct";
 	car: CarTravelResult;
 	pt: PublicTransportResult;
 	deepLinks: {
@@ -65,3 +92,13 @@ export type TravelResponse = {
 		ptSl?: string;
 	};
 };
+
+export type TravelHikeResponse = {
+	mode: "hike";
+	hike: HikeTravelResult;
+	deepLinks?: {
+		hikeGoogleMaps?: string;
+	};
+};
+
+export type TravelResponse = TravelDirectResponse | TravelHikeResponse;

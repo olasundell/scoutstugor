@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { loadScoutstugorData } from "./utils/scoutstugor";
+import { loadScoutstugorData, resolveRegionLabel } from "./utils/scoutstugor";
 
 let stugor: Awaited<ReturnType<typeof loadScoutstugorData>>;
 
@@ -17,8 +17,9 @@ function parseSummary(text: string): { showing: number; total: number } {
 
 test("filters by kommun and coordinates, then resets", async ({ page }) => {
 	await page.goto("/");
+	const regionLabel = resolveRegionLabel();
 	await expect(
-		page.getByRole("heading", { name: "Scoutstugor i Stockholms län" }),
+		page.getByRole("heading", { name: `Scoutstugor i ${regionLabel}` }),
 	).toBeVisible();
 
 	await page.locator(".leaflet-container").waitFor();

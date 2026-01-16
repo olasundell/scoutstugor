@@ -2,6 +2,8 @@
 import flatpickr from "flatpickr";
 import { onMount } from "svelte";
 import "flatpickr/dist/flatpickr.min.css";
+import ElevationProfile from "$lib/components/ElevationProfile.svelte";
+import HikeRouteMap from "$lib/components/HikeRouteMap.svelte";
 import type { Scoutstuga } from "$lib/scoutstugor";
 import type { GeocodeResult } from "$lib/server/travel/graphhopper";
 import {
@@ -38,20 +40,28 @@ let mode = $state<TravelMode>("direct");
 // Inputs
 let carQuery = $state(DEFAULT_CAR_ORIGIN.label);
 let ptQuery = $state(DEFAULT_PT_ORIGIN.label);
+let hikeQuery = $state(DEFAULT_PT_ORIGIN.label);
 let carSelected = $state<{ label: string; coord: LatLon } | null>(
 	DEFAULT_CAR_ORIGIN,
 );
 let ptSelected = $state<{ label: string; coord: LatLon } | null>(
 	DEFAULT_PT_ORIGIN,
 );
+let hikeSelected = $state<{ label: string; coord: LatLon } | null>(
+	DEFAULT_PT_ORIGIN,
+);
 let carResults = $state<GeocodeResult[]>([]);
 let ptResults = $state<GeocodeResult[]>([]);
+let hikeResults = $state<GeocodeResult[]>([]);
 let carSearchLoading = $state(false);
 let ptSearchLoading = $state(false);
+let hikeSearchLoading = $state(false);
 let carLastEmpty = $state<string | null>(null);
 let ptLastEmpty = $state<string | null>(null);
+let hikeLastEmpty = $state<string | null>(null);
 let carDebounce: ReturnType<typeof setTimeout> | null = null;
 let ptDebounce: ReturnType<typeof setTimeout> | null = null;
+let hikeDebounce: ReturnType<typeof setTimeout> | null = null;
 
 let departLocal = $state(defaultDepartLocal());
 let departInput = $state<HTMLInputElement | null>(null);
@@ -62,9 +72,18 @@ let loading = $state(false);
 let error = $state<string | null>(null);
 let result = $state<TravelResponse | null>(null);
 
+// Hike pace (km/h) for time estimate
+let hikePaceKmh = $state(4);
+
+function isDirectResult(value: TravelResponse | null): value is TravelResponse & {
+	mode: "direct";
+} {
+	return value?.mode === "direct";
+}
+
 const resultsVm = $derived.by(() => {
 	const departAt = parseIsoLocalDatetime(departLocal);
-	if (!result) return null;
+	if (!isDirectResult(result)) return null;
 
 	const carArriveAtIso = departAt
 		? new Date(departAt.getTime() + result.car.durationMs).toISOString()
@@ -158,6 +177,13 @@ function formatDuration(ms: number): string {
 	return m ? `${h} h ${m} min` : `${h} h`;
 }
 
+function estimateHikeDurationMs(distanceM: number, paceKmh: number): number {
+	if (!Number.isFinite(distanceM) || distanceM <= 0) return 0;
+	if (!Number.isFinite(paceKmh) || paceKmh <= 0) return 0;
+	const hours = (distanceM / 1000) / paceKmh;
+	return Math.round(hours * 60 * 60_000);
+}
+
 function formatKm(m: number): string {
 	const km = m / 1000;
 	return km >= 10 ? `${Math.round(km)} km` : `${km.toFixed(1)} km`;
@@ -175,6 +201,11 @@ function formatWalkDistance(meters: number): string {
 	if (meters < 1000) return `${Math.round(meters)} m`;
 	const km = meters / 1000;
 	return km >= 10 ? `${Math.round(km)} km` : `${km.toFixed(1)} km`;
+}
+
+function formatMeters(meters: number): string {
+	if (!Number.isFinite(meters)) return "—";
+	return `${Math.round(meters)} m`;
 }
 
 function ptChipClass(leg: TravelResponse["pt"]["legs"][number]): string {
@@ -202,8 +233,11 @@ function getErrorFromJson(value: unknown): string | null {
 	return typeof maybe.error === "string" ? maybe.error : null;
 }
 
-async function searchGeocode(which: "car" | "pt", query?: string) {
-	const q = (query ?? (which === "car" ? carQuery : ptQuery)).trim();
+async function searchGeocode(which: "car" | "pt" | "hike", query?: string) {
+	const q = (
+		query ??
+		(which === "car" ? carQuery : which === "pt" ? ptQuery : hikeQuery)
+	).trim();
 	if (!q) return;
 	error = null;
 
@@ -211,10 +245,14 @@ async function searchGeocode(which: "car" | "pt", query?: string) {
 		carSearchLoading = true;
 		carResults = [];
 		carLastEmpty = null;
-	} else {
+	} else if (which === "pt") {
 		ptSearchLoading = true;
 		ptResults = [];
 		ptLastEmpty = null;
+	} else {
+		hikeSearchLoading = true;
+		hikeResults = [];
+		hikeLastEmpty = null;
 	}
 
 	try {
@@ -229,48 +267,64 @@ async function searchGeocode(which: "car" | "pt", query?: string) {
 		if (which === "car") {
 			carResults = hits;
 			carLastEmpty = hits.length === 0 ? q : null;
-		} else {
+		} else if (which === "pt") {
 			ptResults = hits;
 			ptLastEmpty = hits.length === 0 ? q : null;
+		} else {
+			hikeResults = hits;
+			hikeLastEmpty = hits.length === 0 ? q : null;
 		}
 	} catch (e) {
 		error = e instanceof Error ? e.message : "Okänt fel vid geokodning.";
 	} finally {
 		if (which === "car") carSearchLoading = false;
-		else ptSearchLoading = false;
+		else if (which === "pt") ptSearchLoading = false;
+		else hikeSearchLoading = false;
 	}
 }
 
-function selectGeocode(which: "car" | "pt", hit: GeocodeResult) {
+function selectGeocode(which: "car" | "pt" | "hike", hit: GeocodeResult) {
 	const selected = { label: hit.label, coord: { lat: hit.lat, lon: hit.lon } };
 	if (which === "car") {
 		carSelected = selected;
 		carQuery = selected.label;
 		carResults = [];
-	} else {
+	} else if (which === "pt") {
 		ptSelected = selected;
 		ptQuery = selected.label;
 		ptResults = [];
+	} else {
+		hikeSelected = selected;
+		hikeQuery = selected.label;
+		hikeResults = [];
 	}
 }
 
-function clearOrigin(which: "car" | "pt") {
+function clearOrigin(which: "car" | "pt" | "hike") {
 	if (which === "car") {
 		carSelected = null;
 		carResults = [];
 		return;
 	}
-	ptSelected = null;
-	ptResults = [];
+	if (which === "pt") {
+		ptSelected = null;
+		ptResults = [];
+		return;
+	}
+	hikeSelected = null;
+	hikeResults = [];
 }
 
 function resetToDefaults() {
 	carSelected = DEFAULT_CAR_ORIGIN;
 	ptSelected = DEFAULT_PT_ORIGIN;
+	hikeSelected = DEFAULT_PT_ORIGIN;
 	carQuery = DEFAULT_CAR_ORIGIN.label;
 	ptQuery = DEFAULT_PT_ORIGIN.label;
+	hikeQuery = DEFAULT_PT_ORIGIN.label;
 	carResults = [];
 	ptResults = [];
+	hikeResults = [];
 	error = null;
 	result = null;
 }
@@ -279,7 +333,7 @@ function hitKey(hit: GeocodeResult, index: number): string {
 	return `${hit.lat},${hit.lon}:${hit.label}:${index}`;
 }
 
-async function useMyLocation(which: "car" | "pt") {
+async function useMyLocation(which: "car" | "pt" | "hike") {
 	error = null;
 	if (typeof navigator === "undefined" || !navigator.geolocation) {
 		error = "Din webbläsare stödjer inte platsinformation.";
@@ -295,9 +349,12 @@ async function useMyLocation(which: "car" | "pt") {
 				if (which === "car") {
 					carSelected = selected;
 					carQuery = selected.label;
-				} else {
+				} else if (which === "pt") {
 					ptSelected = selected;
 					ptQuery = selected.label;
+				} else {
+					hikeSelected = selected;
+					hikeQuery = selected.label;
 				}
 				resolve();
 			},
@@ -342,6 +399,30 @@ $effect(() => {
 	}, 250);
 });
 
+$effect(() => {
+	const q = hikeQuery.trim();
+	if (hikeSelected && q === hikeSelected.label) {
+		hikeResults = [];
+		return;
+	}
+	if (q.length < 3) {
+		hikeResults = [];
+		return;
+	}
+	if (hikeDebounce) clearTimeout(hikeDebounce);
+	hikeDebounce = setTimeout(() => {
+		void searchGeocode("hike", q);
+	}, 250);
+});
+
+let lastMode = $state<TravelMode>(mode);
+$effect(() => {
+	if (mode === lastMode) return;
+	lastMode = mode;
+	error = null;
+	result = null;
+});
+
 async function compute() {
 	error = null;
 	result = null;
@@ -350,34 +431,55 @@ async function compute() {
 		error = "Stugan saknar koordinater.";
 		return;
 	}
-	if (!carSelected) {
-		error = "Välj startpunkt för bil-ledare.";
-		return;
-	}
-	if (!ptSelected) {
-		error = "Välj startpunkt för gruppen (kollektivtrafik).";
-		return;
-	}
 	const departAt = parseIsoLocalDatetime(departLocal);
-	if (!departAt) {
-		error = "Välj en giltig avresetid.";
+	if (mode === "direct") {
+		if (!carSelected) {
+			error = "Välj startpunkt för bil-ledare.";
+			return;
+		}
+		if (!ptSelected) {
+			error = "Välj startpunkt för gruppen (kollektivtrafik).";
+			return;
+		}
+		if (!departAt) {
+			error = "Välj en giltig avresetid.";
+			return;
+		}
+	} else if (!hikeSelected) {
+		error = "Välj startpunkt för vandring.";
 		return;
 	}
 
 	loading = true;
 	try {
+		const payload =
+			mode === "direct"
+				? {
+						mode,
+						destination,
+						carOrigin: carSelected?.coord,
+						ptOrigin: ptSelected?.coord,
+						departAt: departAt?.toISOString(),
+						originLabels: {
+							car: carSelected?.label,
+							pt: ptSelected?.label,
+						},
+						destinationLabel: stuga.platsAdress || stuga.namn,
+					}
+				: {
+						mode,
+						destination,
+						hikeOrigin: hikeSelected?.coord,
+						departAt: departAt?.toISOString(),
+						originLabels: {
+							hike: hikeSelected?.label,
+						},
+						destinationLabel: stuga.platsAdress || stuga.namn,
+					};
 		const res = await fetch("/api/travel", {
 			method: "POST",
 			headers: { "content-type": "application/json" },
-			body: JSON.stringify({
-				mode,
-				destination,
-				carOrigin: carSelected.coord,
-				ptOrigin: ptSelected.coord,
-				departAt: departAt.toISOString(),
-				originLabels: { car: carSelected.label, pt: ptSelected.label },
-				destinationLabel: stuga.platsAdress || stuga.namn,
-			}),
+			body: JSON.stringify(payload),
 		});
 		const raw = (await res.json()) as unknown;
 		if (!res.ok)
@@ -421,9 +523,9 @@ async function compute() {
 						<input type="radio" bind:group={mode} value="direct" />
 						<span>Direkt</span>
 					</label>
-					<label class="mode modeDisabled" title="Kommer senare">
-						<input type="radio" bind:group={mode} value="hike" disabled />
-						<span>Vandring (kommer senare)</span>
+					<label class="mode">
+						<input type="radio" bind:group={mode} value="hike" />
+						<span>Vandring</span>
 					</label>
 				</div>
 			</div>
@@ -446,91 +548,151 @@ async function compute() {
 				<div class="hint">Välj datum och tid (lokal tid).</div>
 			</div>
 
-			<div class="field">
-				<div class="label">Start (bil)</div>
-				<div class="searchRow">
-					<input
-						class="input"
-						type="search"
-						placeholder="Skriv adress eller plats…"
-						bind:value={carQuery}
-						oninput={(e) => {
-							const value = (e.target as HTMLInputElement).value;
-							if (carSelected && value !== carSelected.label) clearOrigin("car");
-							carLastEmpty = null;
-						}}
-						onkeydown={(e) => e.key === "Enter" && searchGeocode("car")}
-					/>
-					<button class="btn" type="button" onclick={() => searchGeocode("car")} disabled={carSearchLoading}>
-						{carSearchLoading ? "Söker…" : "Sök"}
-					</button>
-					<button class="btnSecondary" type="button" onclick={() => useMyLocation("car")}>
-						Min position
-					</button>
-				</div>
-				{#if carSelected}
-					<div class="selected">
-						Vald: <strong>{carSelected.label}</strong>
-						<button class="inlineLink" type="button" onclick={() => clearOrigin("car")}>Byt</button>
+			{#if mode === "direct"}
+				<div class="field">
+					<div class="label">Start (bil)</div>
+					<div class="searchRow">
+						<input
+							class="input"
+							type="search"
+							placeholder="Skriv adress eller plats…"
+							bind:value={carQuery}
+							oninput={(e) => {
+								const value = (e.target as HTMLInputElement).value;
+								if (carSelected && value !== carSelected.label) clearOrigin("car");
+								carLastEmpty = null;
+							}}
+							onkeydown={(e) => e.key === "Enter" && searchGeocode("car")}
+						/>
+						<button
+							class="btn"
+							type="button"
+							onclick={() => searchGeocode("car")}
+							disabled={carSearchLoading}
+						>
+							{carSearchLoading ? "Söker…" : "Sök"}
+						</button>
+						<button class="btnSecondary" type="button" onclick={() => useMyLocation("car")}>
+							Min position
+						</button>
 					</div>
-				{/if}
-				{#if carResults.length > 0}
-					<ul class="results" aria-label="Förslag (bil)">
-						{#each carResults as hit, index (hitKey(hit, index))}
-							<li>
-								<button class="result" type="button" onclick={() => selectGeocode("car", hit)}>
-									{hit.label}
-								</button>
-							</li>
-						{/each}
-					</ul>
-				{:else if carLastEmpty === carQuery.trim()}
-					<div class="hint">Inga träffar.</div>
-				{/if}
-			</div>
+					{#if carSelected}
+						<div class="selected">
+							Vald: <strong>{carSelected.label}</strong>
+							<button class="inlineLink" type="button" onclick={() => clearOrigin("car")}>Byt</button>
+						</div>
+					{/if}
+					{#if carResults.length > 0}
+						<ul class="results" aria-label="Förslag (bil)">
+							{#each carResults as hit, index (hitKey(hit, index))}
+								<li>
+									<button class="result" type="button" onclick={() => selectGeocode("car", hit)}>
+										{hit.label}
+									</button>
+								</li>
+							{/each}
+						</ul>
+					{:else if carLastEmpty === carQuery.trim()}
+						<div class="hint">Inga träffar.</div>
+					{/if}
+				</div>
 
-			<div class="field">
-				<div class="label">Start (kollektivtrafik)</div>
-				<div class="searchRow">
-					<input
-						class="input"
-						type="search"
-						placeholder="Skriv adress eller plats…"
-						bind:value={ptQuery}
-						oninput={(e) => {
-							const value = (e.target as HTMLInputElement).value;
-							if (ptSelected && value !== ptSelected.label) clearOrigin("pt");
-							ptLastEmpty = null;
-						}}
-						onkeydown={(e) => e.key === "Enter" && searchGeocode("pt")}
-					/>
-					<button class="btn" type="button" onclick={() => searchGeocode("pt")} disabled={ptSearchLoading}>
-						{ptSearchLoading ? "Söker…" : "Sök"}
-					</button>
-					<button class="btnSecondary" type="button" onclick={() => useMyLocation("pt")}>
-						Min position
-					</button>
-				</div>
-				{#if ptSelected}
-					<div class="selected">
-						Vald: <strong>{ptSelected.label}</strong>
-						<button class="inlineLink" type="button" onclick={() => clearOrigin("pt")}>Byt</button>
+				<div class="field">
+					<div class="label">Start (kollektivtrafik)</div>
+					<div class="searchRow">
+						<input
+							class="input"
+							type="search"
+							placeholder="Skriv adress eller plats…"
+							bind:value={ptQuery}
+							oninput={(e) => {
+								const value = (e.target as HTMLInputElement).value;
+								if (ptSelected && value !== ptSelected.label) clearOrigin("pt");
+								ptLastEmpty = null;
+							}}
+							onkeydown={(e) => e.key === "Enter" && searchGeocode("pt")}
+						/>
+						<button
+							class="btn"
+							type="button"
+							onclick={() => searchGeocode("pt")}
+							disabled={ptSearchLoading}
+						>
+							{ptSearchLoading ? "Söker…" : "Sök"}
+						</button>
+						<button class="btnSecondary" type="button" onclick={() => useMyLocation("pt")}>
+							Min position
+						</button>
 					</div>
-				{/if}
-				{#if ptResults.length > 0}
-					<ul class="results" aria-label="Förslag (gruppen)">
-						{#each ptResults as hit, index (hitKey(hit, index))}
-							<li>
-								<button class="result" type="button" onclick={() => selectGeocode("pt", hit)}>
-									{hit.label}
-								</button>
-							</li>
-						{/each}
-					</ul>
-				{:else if ptLastEmpty === ptQuery.trim()}
-					<div class="hint">Inga träffar.</div>
-				{/if}
-			</div>
+					{#if ptSelected}
+						<div class="selected">
+							Vald: <strong>{ptSelected.label}</strong>
+							<button class="inlineLink" type="button" onclick={() => clearOrigin("pt")}>Byt</button>
+						</div>
+					{/if}
+					{#if ptResults.length > 0}
+						<ul class="results" aria-label="Förslag (gruppen)">
+							{#each ptResults as hit, index (hitKey(hit, index))}
+								<li>
+									<button class="result" type="button" onclick={() => selectGeocode("pt", hit)}>
+										{hit.label}
+									</button>
+								</li>
+							{/each}
+						</ul>
+					{:else if ptLastEmpty === ptQuery.trim()}
+						<div class="hint">Inga träffar.</div>
+					{/if}
+				</div>
+			{:else}
+				<div class="field">
+					<div class="label">Start (vandring)</div>
+					<div class="searchRow">
+						<input
+							class="input"
+							type="search"
+							placeholder="Skriv adress eller plats…"
+							bind:value={hikeQuery}
+							oninput={(e) => {
+								const value = (e.target as HTMLInputElement).value;
+								if (hikeSelected && value !== hikeSelected.label) clearOrigin("hike");
+								hikeLastEmpty = null;
+							}}
+							onkeydown={(e) => e.key === "Enter" && searchGeocode("hike")}
+						/>
+						<button
+							class="btn"
+							type="button"
+							onclick={() => searchGeocode("hike")}
+							disabled={hikeSearchLoading}
+						>
+							{hikeSearchLoading ? "Söker…" : "Sök"}
+						</button>
+						<button class="btnSecondary" type="button" onclick={() => useMyLocation("hike")}>
+							Min position
+						</button>
+					</div>
+					{#if hikeSelected}
+						<div class="selected">
+							Vald: <strong>{hikeSelected.label}</strong>
+							<button class="inlineLink" type="button" onclick={() => clearOrigin("hike")}>Byt</button>
+						</div>
+					{/if}
+					{#if hikeResults.length > 0}
+						<ul class="results" aria-label="Förslag (vandring)">
+							{#each hikeResults as hit, index (hitKey(hit, index))}
+								<li>
+									<button class="result" type="button" onclick={() => selectGeocode("hike", hit)}>
+										{hit.label}
+									</button>
+								</li>
+							{/each}
+						</ul>
+					{:else if hikeLastEmpty === hikeQuery.trim()}
+						<div class="hint">Inga träffar.</div>
+					{/if}
+				</div>
+			{/if}
 
 			<div class="actions">
 				<button class="primary" type="button" onclick={compute} disabled={loading}>
@@ -546,7 +708,7 @@ async function compute() {
 				<p class="error">{error}</p>
 			{/if}
 
-			{#if result}
+			{#if result && result.mode === "direct"}
 				<section class="resultWrap" aria-label="Resultat">
 					<div class="resultSummary">
 						<div class="resultSummaryTop">
@@ -695,6 +857,107 @@ async function compute() {
 							<div class="hint">Inga delresor att visa.</div>
 						{/if}
 					</div>
+				</section>
+			{:else if result && result.mode === "hike"}
+				<section class="resultWrap" aria-label="Resultat (vandring)">
+					<div class="resultSummary">
+						<div class="resultSummaryTop">
+							<div>
+								<div class="resultKicker">Vandringsöversikt</div>
+								<div class="resultHeadline">{stuga.platsAdress || stuga.namn}</div>
+								<div class="resultSub">
+									<span>{hikeSelected?.label ?? "—"}</span>
+									<span class="sep" aria-hidden="true">·</span>
+									<span>{formatKm(result.hike.distanceM)}</span>
+								</div>
+							</div>
+						</div>
+						<dl class="summaryGrid">
+							<div>
+								<dt>Start</dt>
+								<dd>{hikeSelected?.label ?? "—"}</dd>
+							</div>
+							<div>
+								<dt>Mål</dt>
+								<dd>{stuga.platsAdress || stuga.namn}</dd>
+							</div>
+							<div>
+								<dt>Uppskattad tid</dt>
+								<dd>
+									{formatDuration(
+										estimateHikeDurationMs(
+											result.hike.distanceM,
+											hikePaceKmh,
+										),
+									)}
+								</dd>
+							</div>
+						</dl>
+						<div class="paceControl">
+							<label class="label" for="hikePace">Tempo (km/h)</label>
+							<div class="paceRow">
+								<input
+									id="hikePace"
+									type="range"
+									min="2"
+									max="7"
+									step="0.5"
+									bind:value={hikePaceKmh}
+									aria-label="Tempo i km per timme"
+								/>
+								<div class="paceValue">{hikePaceKmh.toFixed(1)} km/h</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="resultGrid" aria-label="Höjd och distans">
+						<div class="resultCard">
+							<div class="resultTitle">Total distans</div>
+							<div class="resultValue">{formatKm(result.hike.distanceM)}</div>
+							<div class="resultMeta">Vandring, enligt OpenRouteService</div>
+						</div>
+						<div class="resultCard">
+							<div class="resultTitle">Stigning/sänkning</div>
+							<div class="resultValue">
+								{formatMeters(result.hike.ascentM)} / {formatMeters(result.hike.descentM)}
+							</div>
+							<div class="resultMeta">Totalt upp och ner längs rutten</div>
+						</div>
+					</div>
+
+					<div class="journeyCard">
+						<div class="journeyHeader">
+							<div class="journeyTitle">Höjdprofil</div>
+							<div class="journeyMeta">
+								<span class="journeyDuration">
+									{formatDuration(
+										estimateHikeDurationMs(
+											result.hike.distanceM,
+											hikePaceKmh,
+										),
+									)}
+								</span>
+							</div>
+						</div>
+						<ElevationProfile points={result.hike.profile} />
+						{#if result.deepLinks?.hikeGoogleMaps}
+							<a class="linkBtn" href={result.deepLinks.hikeGoogleMaps} target="_blank" rel="noreferrer">
+								Öppna rutt
+							</a>
+						{/if}
+					</div>
+
+					{#if result.hike.route.length > 1}
+						<div class="journeyCard">
+							<div class="journeyHeader">
+								<div class="journeyTitle">Ruttkarta</div>
+								<div class="journeyMeta">
+									<span class="journeyDuration">{formatKm(result.hike.distanceM)}</span>
+								</div>
+							</div>
+							<HikeRouteMap route={result.hike.route} />
+						</div>
+					{/if}
 				</section>
 			{/if}
 		</div>
@@ -987,6 +1250,28 @@ async function compute() {
 		font-size: 13px;
 		font-weight: 800;
 		color: #0f172a;
+	}
+
+	.paceControl {
+		display: grid;
+		gap: 6px;
+	}
+
+	.paceRow {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		gap: 10px;
+		align-items: center;
+	}
+
+	.paceRow input[type="range"] {
+		width: 100%;
+	}
+
+	.paceValue {
+		font-size: 13px;
+		font-weight: 900;
+		color: #1d4ed8;
 	}
 
 	.compareGrid {

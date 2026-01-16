@@ -24,3 +24,11 @@ export async function loadScoutstugorData(): Promise<ScoutstugaData[]> {
 
 	return chunks;
 }
+
+export function resolveRegionLabel(): string {
+	const envLabel = process.env.SCOUTSTUGOR_REGION_LABEL?.trim();
+	if (envLabel) return envLabel;
+	return resolveScoutstugorDataPaths().length > 1
+		? "Sverige"
+		: "Stockholms län";
+}

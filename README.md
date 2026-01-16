@@ -1,12 +1,36 @@
 # Scoutstuga
 
-En liten webbapp som listar scoutstugor i Stockholms län (default), baserat på datafiler i `data/`.
+En liten webbapp som listar scoutstugor i Sverige (default), baserat på datafiler i `data/`.
 
 ## Data
 
-- Canonical data finns i `data/scoutstugor*.json` (default `data/scoutstugor.stockholm.json`).
+- Canonical data finns i `data/scoutstugor*.json` (default inkluderar `data/scoutstugor.stockholm.json` + `data/scoutstugor.sverige.json`).
 - Varje post har ett **stabilt `id`**. Ändra inte `id` när du rättar stavning/byter namn — behåll `id` och ändra övriga fält.
 - Efter ändring i JSON-data, kör `bun run data:validate`.
+
+### Import av nationellt underlag
+
+`data/scoutstugor.sverige.json` hämtas från scoutstuga.se:
+
+```sh
+bun run data:import:scoutstuga
+```
+
+Flaggor:
+
+- `--include-stockholm`: inkludera Stockholm (standard är att exkludera för att inte krocka med `scoutstugor.stockholm.json`)
+- `--skip-geocode`: hoppa över reverse-geokodning (kommun/adress fylls då med län som fallback)
+- `--apply`: skriv över `data/scoutstugor.sverige.json` även om konflikter hittas (en rapport skrivs alltid)
+
+Om importen hittar konflikter mot befintliga data skrivs `data/import-scoutstuga-conflicts.json` och körningen avbryts utan `--apply`.
+Lös konflikter genom att lägga in beslut i `data/import-scoutstuga-resolutions.json`:
+
+```json
+{
+  "scoutstuga-123": { "platsAdress": "keepExisting" },
+  "scoutstuga-456": { "platsAdress": "acceptIncoming" }
+}
+```
 
 ### Data + region (valfritt)
 
@@ -89,6 +113,8 @@ För att kunna beräkna restider krävs API-nycklar:
 
 - `GRAPHHOPPER_API_KEY` (GraphHopper Routing + Geocoding)
 - `TRAFIKLAB_RESROBOT_ACCESS_ID` (Trafiklab ResRobot)
+- `OPENROUTESERVICE_API_KEY` (OpenRouteService för vandringsläge + höjdprofil)
+- `OPENROUTESERVICE_BASE_URL` (valfritt; default `https://api.openrouteservice.org`)
 
 Du kan lägga dessa i en lokal `.env` när du kör i dev.
 
