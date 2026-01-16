@@ -7,6 +7,9 @@ import TravelPlanner from "$lib/components/TravelPlanner.svelte";
 import type { PageData } from "./$types";
 
 let { data }: { data: PageData } = $props();
+const regionLabel = data.regionLabel;
+const pageTitle = `Scoutstugor i ${regionLabel}`;
+const pageDescription = `Lista över scoutstugor i ${regionLabel} med filtrering och kontaktuppgifter.`;
 
 type TriStateYesNo = "" | "ja" | "nej";
 type ToalettFilter = "" | "inne" | "ute" | "båda" | "ingen";
@@ -36,6 +39,14 @@ function parseNonNegativeInt(value: string | null): number | null {
 	return n;
 }
 
+function parseNonNegativeNumber(value: string | null): number | null {
+	if (!value) return null;
+	if (!/^\d+(\.\d+)?$/.test(value)) return null;
+	const n = Number.parseFloat(value);
+	if (!Number.isFinite(n) || n < 0) return null;
+	return n;
+}
+
 function readParam(key: string): string {
 	return page.url.searchParams.get(key) ?? "";
 }
@@ -56,6 +67,18 @@ let minSangar = $state<number | null>(parseNonNegativeInt(readParam("minS")));
 let minGolvytaM2 = $state<number | null>(
 	parseNonNegativeInt(readParam("minM2")),
 );
+let maxBadplatsBilKm = $state<number | null>(
+	parseNonNegativeNumber(readParam("maxBadBil")),
+);
+let maxBadplatsGangKm = $state<number | null>(
+	parseNonNegativeNumber(readParam("maxBadGang")),
+);
+let maxMataffarBilKm = $state<number | null>(
+	parseNonNegativeNumber(readParam("maxMatBil")),
+);
+let maxMataffarGangKm = $state<number | null>(
+	parseNonNegativeNumber(readParam("maxMatGang")),
+);
 let hasCoordinates = $state(readParam("coords") === "1");
 let hasPrisinfo = $state(readParam("pris") === "1");
 let hasBokningslank = $state(readParam("bok") === "1");
@@ -66,6 +89,10 @@ const initialAdvancedOpen = Boolean(
 		readParam("toalett") ||
 		readParam("minS") ||
 		readParam("minM2") ||
+		readParam("maxBadBil") ||
+		readParam("maxBadGang") ||
+		readParam("maxMatBil") ||
+		readParam("maxMatGang") ||
 		readParam("coords") ||
 		readParam("pris") ||
 		readParam("bok"),
@@ -112,6 +139,10 @@ const activeAdvancedCount = $derived.by(() => {
 	if (toalettFilter) count += 1;
 	if (typeof minSangar === "number") count += 1;
 	if (typeof minGolvytaM2 === "number") count += 1;
+	if (typeof maxBadplatsBilKm === "number") count += 1;
+	if (typeof maxBadplatsGangKm === "number") count += 1;
+	if (typeof maxMataffarBilKm === "number") count += 1;
+	if (typeof maxMataffarGangKm === "number") count += 1;
 	if (hasCoordinates) count += 1;
 	if (hasPrisinfo) count += 1;
 	if (hasBokningslank) count += 1;
@@ -177,6 +208,10 @@ $effect(() => {
 	toalettFilter = parseToalettFilter(sp.get("toalett"));
 	minSangar = parseNonNegativeInt(sp.get("minS"));
 	minGolvytaM2 = parseNonNegativeInt(sp.get("minM2"));
+	maxBadplatsBilKm = parseNonNegativeNumber(sp.get("maxBadBil"));
+	maxBadplatsGangKm = parseNonNegativeNumber(sp.get("maxBadGang"));
+	maxMataffarBilKm = parseNonNegativeNumber(sp.get("maxMatBil"));
+	maxMataffarGangKm = parseNonNegativeNumber(sp.get("maxMatGang"));
 	hasCoordinates = sp.get("coords") === "1";
 	hasPrisinfo = sp.get("pris") === "1";
 	hasBokningslank = sp.get("bok") === "1";
@@ -198,6 +233,14 @@ $effect(() => {
 	if (typeof minSangar === "number") params.set("minS", String(minSangar));
 	if (typeof minGolvytaM2 === "number")
 		params.set("minM2", String(minGolvytaM2));
+	if (typeof maxBadplatsBilKm === "number")
+		params.set("maxBadBil", String(maxBadplatsBilKm));
+	if (typeof maxBadplatsGangKm === "number")
+		params.set("maxBadGang", String(maxBadplatsGangKm));
+	if (typeof maxMataffarBilKm === "number")
+		params.set("maxMatBil", String(maxMataffarBilKm));
+	if (typeof maxMataffarGangKm === "number")
+		params.set("maxMatGang", String(maxMataffarGangKm));
 	if (hasCoordinates) params.set("coords", "1");
 	if (hasPrisinfo) params.set("pris", "1");
 	if (hasBokningslank) params.set("bok", "1");
@@ -246,6 +289,26 @@ const filtered = $derived.by(() => {
 			if (stuga.golvytaM2 < minM2) return false;
 		}
 
+		if (typeof maxBadplatsBilKm === "number") {
+			if (typeof stuga.avstandBadplatsBilM !== "number") return false;
+			if (stuga.avstandBadplatsBilM > maxBadplatsBilKm * 1000) return false;
+		}
+
+		if (typeof maxBadplatsGangKm === "number") {
+			if (typeof stuga.avstandBadplatsGangM !== "number") return false;
+			if (stuga.avstandBadplatsGangM > maxBadplatsGangKm * 1000) return false;
+		}
+
+		if (typeof maxMataffarBilKm === "number") {
+			if (typeof stuga.avstandMataffarBilM !== "number") return false;
+			if (stuga.avstandMataffarBilM > maxMataffarBilKm * 1000) return false;
+		}
+
+		if (typeof maxMataffarGangKm === "number") {
+			if (typeof stuga.avstandMataffarGangM !== "number") return false;
+			if (stuga.avstandMataffarGangM > maxMataffarGangKm * 1000) return false;
+		}
+
 		if (hasCoordinates) {
 			if (stuga.latitud === null || stuga.longitud === null) return false;
 		}
@@ -285,22 +348,43 @@ const filtered = $derived.by(() => {
 
 const displayed = $derived.by(() => {
 	const items = [...filtered];
-	if (!sortBy) return items;
-	return items.sort((a, b) => {
-		const ta = travelTimesById[a.id];
-		const tb = travelTimesById[b.id];
-		const va = ta?.pt.durationMs;
-		const vb = tb?.pt.durationMs;
-		if (typeof va !== "number" && typeof vb !== "number") return 0;
-		if (typeof va !== "number") return 1;
-		if (typeof vb !== "number") return -1;
-		return va - vb;
-	});
+	if (sortBy) {
+		items.sort((a, b) => {
+			const ta = travelTimesById[a.id];
+			const tb = travelTimesById[b.id];
+			const va = ta?.pt.durationMs;
+			const vb = tb?.pt.durationMs;
+			if (typeof va !== "number" && typeof vb !== "number") return 0;
+			if (typeof va !== "number") return 1;
+			if (typeof vb !== "number") return -1;
+			return va - vb;
+		});
+	}
+
+	if (focusedId) {
+		const focusedIndex = items.findIndex((stuga) => stuga.id === focusedId);
+		if (focusedIndex > 0) {
+			const [focused] = items.splice(focusedIndex, 1);
+			items.unshift(focused);
+		}
+	}
+
+	return items;
 });
 
 const filteredWithCoordinates = $derived.by(() =>
 	filtered.filter((stuga) => stuga.latitud !== null && stuga.longitud !== null),
 );
+
+const selectedStuga = $derived.by(() => {
+	if (!focusedId) return null;
+	return filtered.find((stuga) => stuga.id === focusedId) ?? null;
+});
+
+$effect(() => {
+	if (!focusedId) return;
+	if (!selectedStuga) focusedId = null;
+});
 
 function resetFilters() {
 	query = "";
@@ -311,6 +395,10 @@ function resetFilters() {
 	toalettFilter = "";
 	minSangar = null;
 	minGolvytaM2 = null;
+	maxBadplatsBilKm = null;
+	maxBadplatsGangKm = null;
+	maxMataffarBilKm = null;
+	maxMataffarGangKm = null;
 	hasCoordinates = false;
 	hasPrisinfo = false;
 	hasBokningslank = false;
@@ -337,6 +425,10 @@ function focusOnMap(id: string) {
 		?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+function focusInList(id: string) {
+	focusedId = id;
+}
+
 function openTravelPlanner(id: string) {
 	plannerStugaId = id;
 }
@@ -352,23 +444,25 @@ function formatDuration(ms: number): string {
 	const m = totalMinutes % 60;
 	return m ? `${h} h ${m} min` : `${h} h`;
 }
+
+function formatDistanceKm(distanceM: number): string {
+	const km = distanceM / 1000;
+	if (km < 10) return `${km.toFixed(1)} km`;
+	return `${Math.round(km)} km`;
+}
 </script>
 
 <svelte:head>
-	<title>Scoutstugor i Stockholms län</title>
+	<title>{pageTitle}</title>
 	<meta
 		name="description"
-		content="Lista över scoutstugor i Stockholms län med filtrering och kontaktuppgifter."
+		content={pageDescription}
 	/>
 </svelte:head>
 
 <main class="page">
 	<header class="hero">
-		<h1>Scoutstugor i Stockholms län</h1>
-		<p class="subtitle">
-			Filtrera och sök i masterlistan. Data kommer från
-			<code>data/scoutstugor.stockholm.json</code>.
-		</p>
+		<h1>{pageTitle}</h1>
 	</header>
 
 	<section class="filters" aria-label="Filter">
@@ -475,6 +569,58 @@ function formatDuration(ms: number): string {
 							bind:value={minGolvytaM2}
 						/>
 					</label>
+
+					<label class="field">
+						<span class="label">Max km till badplats (bil)</span>
+						<input
+							class="input"
+							type="number"
+							min="0"
+							step="0.1"
+							inputmode="decimal"
+							placeholder="t.ex. 2.5"
+							bind:value={maxBadplatsBilKm}
+						/>
+					</label>
+
+					<label class="field">
+						<span class="label">Max km till badplats (gång)</span>
+						<input
+							class="input"
+							type="number"
+							min="0"
+							step="0.1"
+							inputmode="decimal"
+							placeholder="t.ex. 3"
+							bind:value={maxBadplatsGangKm}
+						/>
+					</label>
+
+					<label class="field">
+						<span class="label">Max km till mataffär (bil)</span>
+						<input
+							class="input"
+							type="number"
+							min="0"
+							step="0.1"
+							inputmode="decimal"
+							placeholder="t.ex. 5"
+							bind:value={maxMataffarBilKm}
+						/>
+					</label>
+
+					<label class="field">
+						<span class="label">Max km till mataffär (gång)</span>
+						<input
+							class="input"
+							type="number"
+							min="0"
+							step="0.1"
+							inputmode="decimal"
+							placeholder="t.ex. 6"
+							bind:value={maxMataffarGangKm}
+						/>
+					</label>
 				</div>
 
 				<div class="advancedChecks" aria-label="Avancerade filter">
@@ -507,190 +653,189 @@ function formatDuration(ms: number): string {
 	</section>
 
 	<section class="mapSection" aria-label="Karta" id="karta">
-		<div class="mapHeader">
-			<h2 class="mapTitle">Karta</h2>
-			<p class="mapSubtitle">
-				Visar {filteredWithCoordinates.length} av {filtered.length} i urvalet med koordinater
-				(OpenStreetMap).
-			</p>
-		</div>
-		<OsmMap stugor={filtered} focusedId={focusedId} />
+		<OsmMap stugor={filtered} focusedId={focusedId} onSelect={focusInList} />
 		{#if filteredWithCoordinates.length === 0}
 			<p class="mapHint">Inga koordinater i urvalet ännu.</p>
 		{/if}
 	</section>
 
-	{#if filtered.length === 0}
-		<p class="empty">Inga träffar. Prova att ändra sökning eller filter.</p>
-	{:else}
-		<ul class="list" aria-label="Scoutstugor">
-			{#each displayed as stuga (stuga.id)}
-				{@const icons = facilityIcons(stuga)}
-				<li class="card">
-					<div class="cardHeader">
-						<div class="titleRow">
-							<h2 class="name">{stuga.namn}</h2>
-							{#if icons.length > 0}
-								<div class="icons" aria-label="Faciliteter">
-									{#each icons as icon (icon.label)}
-										<span
-											class="icon"
-											role="img"
-											title={icon.label}
-											aria-label={icon.label}
-										>
-											<span class="iconEmoji" title={icon.label}>{icon.emoji}</span>
-											{#if icon.crossed}
-												<span class="iconCross" aria-hidden="true">✕</span>
-											{/if}
-										</span>
-									{/each}
-								</div>
-							{/if}
-						</div>
-						<div class="badges">
-							<span class="badge">{stuga.kommun}</span>
-							<span class="badge badgeSecondary">{stuga.typ}</span>
-						</div>
-					</div>
-
-					{#if stuga.organisation}
-						<p class="meta"><span class="metaLabel">Organisation</span> {stuga.organisation}</p>
-					{/if}
-					{#if stuga.platsAdress}
-						<p class="meta"><span class="metaLabel">Plats/adress</span> {stuga.platsAdress}</p>
-					{/if}
-
-					{#if stuga.omStuganUrl || stuga.karUrl}
-						<p class="meta">
-							<span class="metaLabel">Mer info</span>
-							<span class="contact">
-								{#if stuga.omStuganUrl}
-									<a class="link" href={stuga.omStuganUrl} target="_blank" rel="noreferrer">
-										Om stugan
-									</a>
-								{/if}
-								{#if stuga.karUrl}
-									{#if stuga.omStuganUrl}<span class="sep">·</span>{/if}
-									<a class="link" href={stuga.karUrl} target="_blank" rel="noreferrer">
-										Kårens sida
-									</a>
-								{/if}
-							</span>
-						</p>
-					{/if}
-
-					{#if stuga.epost || stuga.telefon}
-						<p class="meta">
-							<span class="metaLabel">Kontakt</span>
-							<span class="contact">
-								{#if stuga.epostadresser.length > 0}
-									{#each stuga.epostadresser as email, emailIndex (email)}
-										<a class="link" href={`mailto:${email}`}>{email}</a>{#if
-											emailIndex !== stuga.epostadresser.length - 1
-										}<span class="sep">·</span>{/if}
-									{/each}
-								{:else if stuga.epost}
-									<span>{stuga.epost}</span>
-								{/if}
-
-								{#if stuga.telefon}
-									{#if stuga.epost || stuga.epostadresser.length > 0}
-										<span class="sep">·</span>
-									{/if}
-									<a class="link" href={toTelHref(stuga.telefon)}>{stuga.telefon}</a>
-								{/if}
-							</span>
-						</p>
-					{/if}
-
-					{#if stuga.ovrigt}
-						<p class="meta metaOther">{stuga.ovrigt}</p>
-					{/if}
-
-					{#if stuga.prisinfo || stuga.bokningslank}
-						<div class="enrichment" aria-label="Pris och bokning">
-							{#if stuga.prisinfo}
-								<p class="meta metaOther">
-									<span class="metaLabel">Pris</span> {stuga.prisinfo}
-									{#if stuga.prisKallaUrl}
-										<a
-											class="link"
-											href={stuga.prisKallaUrl}
-											target="_blank"
-											rel="noreferrer"
-										>
-											Källa
-										</a>
-									{/if}
-								</p>
-							{/if}
-							{#if stuga.bokningslank}
-								<p class="meta metaOther">
-									<span class="metaLabel">Bokning</span>
-									<a
-										class="link"
-										href={stuga.bokningslank}
-										target="_blank"
-										rel="noreferrer"
-									>
-										Öppna bokning
-									</a>
-									{#if stuga.bokningsKallaUrl}
-										<a
-											class="link"
-											href={stuga.bokningsKallaUrl}
-											target="_blank"
-											rel="noreferrer"
-										>
-											Källa
-										</a>
-									{/if}
-								</p>
-							{/if}
-							{#if stuga.senastKontrollerad}
-								<p class="meta metaOther">
-									<span class="metaLabel">Kontrollerad</span> {stuga.senastKontrollerad}
-								</p>
-							{/if}
-						</div>
-					{/if}
-
-					<div class="actions">
-						{#if stuga.latitud !== null && stuga.longitud !== null}
-							<button class="actionButton" type="button" onclick={() => focusOnMap(stuga.id)}>
-								Visa på karta
-							</button>
-							<button class="actionButton" type="button" onclick={() => openTravelPlanner(stuga.id)}>
-								Planera övernattning/hajk
-							</button>
-							<a
-								class="actionLink"
-								href={openInOsm(stuga)}
-								target="_blank"
-								rel="noreferrer"
-							>
-								Öppna i OpenStreetMap
-							</a>
-							{#if stuga.noggrannhet}
-								<span class="accuracy">{stuga.noggrannhet}</span>
-							{/if}
-						{:else}
-							<span class="noCoords">Saknar koordinater</span>
+	<section class="detailSection" aria-live="polite">
+		{#if filtered.length === 0}
+			<p class="empty">Inga träffar. Prova att ändra sökning eller filter.</p>
+		{:else if !selectedStuga}
+			<p class="empty">Välj en stuga i kartan för att se detaljer.</p>
+		{:else}
+			{@const stuga = selectedStuga}
+			{@const icons = facilityIcons(stuga)}
+			<div class="card">
+				<div class="cardHeader">
+					<div class="titleRow">
+						<h2 class="name">{stuga.namn}</h2>
+						{#if icons.length > 0}
+							<div class="icons" aria-label="Faciliteter">
+								{#each icons as icon (icon.label)}
+									<span class="icon" role="img" title={icon.label} aria-label={icon.label}>
+										<span class="iconEmoji" title={icon.label}>{icon.emoji}</span>
+										{#if icon.crossed}
+											<span class="iconCross" aria-hidden="true">✕</span>
+										{/if}
+									</span>
+								{/each}
+							</div>
 						{/if}
 					</div>
+					<div class="badges">
+						<span class="badge">{stuga.kommun}</span>
+						<span class="badge badgeSecondary">{stuga.typ}</span>
+					</div>
+				</div>
 
-					{#if travelTimesById[stuga.id]}
-						<div class="travelTimes" aria-label="Restider">
-							<span class="timePill timePillSecondary">
-								SL: <strong>{formatDuration(travelTimesById[stuga.id].pt.durationMs)}</strong>
-							</span>
-						</div>
+				{#if stuga.organisation}
+					<p class="meta"><span class="metaLabel">Organisation</span> {stuga.organisation}</p>
+				{/if}
+				{#if stuga.platsAdress}
+					<p class="meta"><span class="metaLabel">Plats/adress</span> {stuga.platsAdress}</p>
+				{/if}
+				{#if typeof stuga.avstandBadplatsBilM === "number" || typeof stuga.avstandMataffarBilM === "number"}
+					<p class="meta">
+						<span class="metaLabel">Närhet (bil)</span>
+						{#if typeof stuga.avstandBadplatsBilM === "number"}
+							Badplats {formatDistanceKm(stuga.avstandBadplatsBilM)}
+						{/if}
+						{#if typeof stuga.avstandBadplatsBilM === "number" &&
+							typeof stuga.avstandMataffarBilM === "number"}
+							<span class="sep">·</span>
+						{/if}
+						{#if typeof stuga.avstandMataffarBilM === "number"}
+							Mataffär {formatDistanceKm(stuga.avstandMataffarBilM)}
+						{/if}
+					</p>
+				{/if}
+				{#if typeof stuga.avstandBadplatsGangM === "number" || typeof stuga.avstandMataffarGangM === "number"}
+					<p class="meta">
+						<span class="metaLabel">Närhet (gång)</span>
+						{#if typeof stuga.avstandBadplatsGangM === "number"}
+							Badplats {formatDistanceKm(stuga.avstandBadplatsGangM)}
+						{/if}
+						{#if typeof stuga.avstandBadplatsGangM === "number" &&
+							typeof stuga.avstandMataffarGangM === "number"}
+							<span class="sep">·</span>
+						{/if}
+						{#if typeof stuga.avstandMataffarGangM === "number"}
+							Mataffär {formatDistanceKm(stuga.avstandMataffarGangM)}
+						{/if}
+					</p>
+				{/if}
+
+				{#if stuga.omStuganUrl || stuga.karUrl}
+					<p class="meta">
+						<span class="metaLabel">Mer info</span>
+						<span class="contact">
+							{#if stuga.omStuganUrl}
+								<a class="link" href={stuga.omStuganUrl} target="_blank" rel="noreferrer">
+									Om stugan
+								</a>
+							{/if}
+							{#if stuga.karUrl}
+								{#if stuga.omStuganUrl}<span class="sep">·</span>{/if}
+								<a class="link" href={stuga.karUrl} target="_blank" rel="noreferrer">
+									Kårens sida
+								</a>
+							{/if}
+						</span>
+					</p>
+				{/if}
+
+				{#if stuga.epost || stuga.telefon}
+					<p class="meta">
+						<span class="metaLabel">Kontakt</span>
+						<span class="contact">
+							{#if stuga.epostadresser.length > 0}
+								{#each stuga.epostadresser as email, emailIndex (email)}
+									<a class="link" href={`mailto:${email}`}>{email}</a>{#if
+										emailIndex !== stuga.epostadresser.length - 1
+									}<span class="sep">·</span>{/if}
+								{/each}
+							{:else if stuga.epost}
+								<span>{stuga.epost}</span>
+							{/if}
+
+							{#if stuga.telefon}
+								{#if stuga.epost || stuga.epostadresser.length > 0}
+									<span class="sep">·</span>
+								{/if}
+								<a class="link" href={toTelHref(stuga.telefon)}>{stuga.telefon}</a>
+							{/if}
+						</span>
+					</p>
+				{/if}
+
+				{#if stuga.ovrigt}
+					<p class="meta metaOther">{stuga.ovrigt}</p>
+				{/if}
+
+				{#if stuga.prisinfo || stuga.bokningslank}
+					<div class="enrichment" aria-label="Pris och bokning">
+						{#if stuga.prisinfo}
+							<p class="meta metaOther">
+								<span class="metaLabel">Pris</span> {stuga.prisinfo}
+								{#if stuga.prisKallaUrl}
+									<a class="link" href={stuga.prisKallaUrl} target="_blank" rel="noreferrer">
+										Källa
+									</a>
+								{/if}
+							</p>
+						{/if}
+						{#if stuga.bokningslank}
+							<p class="meta metaOther">
+								<span class="metaLabel">Bokning</span>
+								<a class="link" href={stuga.bokningslank} target="_blank" rel="noreferrer">
+									Öppna bokning
+								</a>
+								{#if stuga.bokningsKallaUrl}
+									<a class="link" href={stuga.bokningsKallaUrl} target="_blank" rel="noreferrer">
+										Källa
+									</a>
+								{/if}
+							</p>
+						{/if}
+						{#if stuga.senastKontrollerad}
+							<p class="meta metaOther">
+								<span class="metaLabel">Kontrollerad</span> {stuga.senastKontrollerad}
+							</p>
+						{/if}
+					</div>
+				{/if}
+
+				<div class="actions">
+					{#if stuga.latitud !== null && stuga.longitud !== null}
+						<button class="actionButton" type="button" onclick={() => focusOnMap(stuga.id)}>
+							Visa på karta
+						</button>
+						<button class="actionButton" type="button" onclick={() => openTravelPlanner(stuga.id)}>
+							Planera övernattning/hajk
+						</button>
+						<a class="actionLink" href={openInOsm(stuga)} target="_blank" rel="noreferrer">
+							Öppna i OpenStreetMap
+						</a>
+						{#if stuga.noggrannhet}
+							<span class="accuracy">{stuga.noggrannhet}</span>
+						{/if}
+					{:else}
+						<span class="noCoords">Saknar koordinater</span>
 					{/if}
-				</li>
-			{/each}
-		</ul>
-	{/if}
+				</div>
+
+				{#if travelTimesById[stuga.id]}
+					<div class="travelTimes" aria-label="Restider">
+						<span class="timePill timePillSecondary">
+							SL: <strong>{formatDuration(travelTimesById[stuga.id].pt.durationMs)}</strong>
+						</span>
+					</div>
+				{/if}
+			</div>
+		{/if}
+	</section>
 
 	{#if plannerStugaId}
 		{@const stuga = data.stugor.find((s) => s.id === plannerStugaId)}
@@ -703,39 +848,28 @@ function formatDuration(ms: number): string {
 <style>
 	.page {
 		min-height: 100vh;
-		padding: 32px 16px 64px;
+	padding: 12px 16px 56px;
 		background: radial-gradient(1200px circle at 15% 0%, #eef3ff 0%, #f7f8fb 55%, #ffffff 100%);
 		color: #0f172a;
 		font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
 			"Noto Sans", "Liberation Sans", sans-serif;
 	}
 
-	code {
-		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-			"Courier New", monospace;
-		font-size: 0.95em;
-	}
-
 	.hero {
 		max-width: 1100px;
-		margin: 0 auto 28px;
+	margin: 0 auto 8px;
 	}
 
 	h1 {
-		margin: 0 0 8px;
-		font-size: clamp(26px, 4vw, 40px);
-		letter-spacing: -0.02em;
+	margin: 0 0 4px;
+	font-size: clamp(22px, 3.2vw, 32px);
+	letter-spacing: -0.015em;
 	}
 
-	.subtitle {
-		margin: 0;
-		color: #334155;
-		line-height: 1.45;
-	}
 
 	.filters {
 		max-width: 1100px;
-		margin: 0 auto 18px;
+	margin: 0 auto 4px;
 		display: grid;
 		grid-template-columns: 1.6fr 1fr 1fr auto;
 		gap: 12px;
@@ -793,9 +927,9 @@ function formatDuration(ms: number): string {
 		gap: 10px;
 		align-items: center;
 		justify-content: space-between;
-		padding: 10px 12px;
+	padding: 6px 10px;
 		cursor: pointer;
-		font-size: 14px;
+	font-size: 13px;
 		font-weight: 700;
 		color: #0f172a;
 	}
@@ -814,9 +948,9 @@ function formatDuration(ms: number): string {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		padding: 4px 10px;
+	padding: 2px 8px;
 		border-radius: 999px;
-		font-size: 12px;
+	font-size: 11px;
 		font-weight: 900;
 		background: rgba(37, 99, 235, 0.12);
 		color: #1d4ed8;
@@ -910,6 +1044,11 @@ function formatDuration(ms: number): string {
 		color: #475569;
 	}
 
+.detailSection {
+	max-width: 1100px;
+	margin: 0 auto;
+}
+
 	.mapSection {
 		max-width: 1100px;
 		margin: 0 auto 20px;
@@ -917,40 +1056,10 @@ function formatDuration(ms: number): string {
 		gap: 10px;
 	}
 
-	.mapHeader {
-		display: flex;
-		gap: 12px;
-		align-items: baseline;
-		justify-content: space-between;
-		flex-wrap: wrap;
-	}
-
-	.mapTitle {
-		margin: 0;
-		font-size: 16px;
-		letter-spacing: -0.01em;
-	}
-
-	.mapSubtitle {
-		margin: 0;
-		color: #475569;
-		font-size: 13px;
-	}
-
 	.mapHint {
 		margin: 0;
 		color: #64748b;
 		font-size: 13px;
-	}
-
-	.list {
-		list-style: none;
-		padding: 0;
-		margin: 0 auto;
-		max-width: 1100px;
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-		gap: 14px;
 	}
 
 	.card {
@@ -978,8 +1087,9 @@ function formatDuration(ms: number): string {
 
 	.name {
 		margin: 0;
-		font-size: 18px;
-		letter-spacing: -0.01em;
+	font-size: 16px;
+	line-height: 1.2;
+	letter-spacing: -0.005em;
 		flex: 0 1 auto;
 	}
 

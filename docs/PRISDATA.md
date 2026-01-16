@@ -1,6 +1,6 @@
 ## Prisdata: källa + återkontroll
 
-Målet är att `data/scoutstugor.stockholm.json` ska vara single source of truth.
+Målet är att `data/scoutstugor*.json` ska vara single source of truth.
 
 ### Fält (per stuga)
 

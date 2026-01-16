@@ -1,0 +1,72 @@
+services:
+  osrm-download:
+    image: curlimages/curl:8.11.0
+    container_name: osrm-download
+    volumes:
+      - ./osrm-car:/data-car
+      - ./osrm-foot:/data-foot
+    command:
+      [
+        "sh",
+        "-c",
+        "if [ ! -f /data-car/sweden-latest.osm.pbf ]; then curl -L -o /data-car/sweden-latest.osm.pbf https://download.geofabrik.de/europe/sweden-latest.osm.pbf; fi; if [ ! -f /data-foot/sweden-latest.osm.pbf ]; then cp /data-car/sweden-latest.osm.pbf /data-foot/sweden-latest.osm.pbf; fi"
+      ]
+    restart: "no"
+
+  osrm-car-prepare:
+    image: kradenko/osrm-backend:arm64
+    container_name: osrm-car-prepare
+    depends_on:
+      osrm-download:
+        condition: service_completed_successfully
+    volumes:
+      - ./osrm-car:/data
+    command:
+      [
+        "sh",
+        "-c",
+        "cd /data && if [ ! -f sweden-latest.osrm.datasource_names ]; then rm -f sweden-latest.osrm*; osrm-extract -p /opt/car.lua sweden-latest.osm.pbf; osrm-partition sweden-latest.osrm; osrm-customize sweden-latest.osrm; fi"
+      ]
+    restart: "no"
+
+  osrm-car:
+    image: kradenko/osrm-backend:arm64
+    container_name: osrm-car
+    depends_on:
+      osrm-car-prepare:
+        condition: service_completed_successfully
+    ports:
+      - "5005:5000"
+    volumes:
+      - ./osrm-car:/data
+    command: ["osrm-routed", "--algorithm", "mld", "/data/sweden-latest.osrm"]
+    restart: unless-stopped
+
+  osrm-foot-prepare:
+    image: kradenko/osrm-backend:arm64
+    container_name: osrm-foot-prepare
+    depends_on:
+      osrm-download:
+        condition: service_completed_successfully
+    volumes:
+      - ./osrm-foot:/data
+    command:
+      [
+        "sh",
+        "-c",
+        "cd /data && if [ ! -f sweden-latest.osrm.datasource_names ]; then rm -f sweden-latest.osrm*; osrm-extract -p /opt/foot.lua sweden-latest.osm.pbf; osrm-partition sweden-latest.osrm; osrm-customize sweden-latest.osrm; fi"
+      ]
+    restart: "no"
+
+  osrm-foot:
+    image: kradenko/osrm-backend:arm64
+    container_name: osrm-foot
+    depends_on:
+      osrm-foot-prepare:
+        condition: service_completed_successfully
+    ports:
+      - "5006:5000"
+    volumes:
+      - ./osrm-foot:/data
+    command: ["osrm-routed", "--algorithm", "mld", "/data/sweden-latest.osrm"]
+    restart: unless-stopped

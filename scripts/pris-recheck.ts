@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { resolveScoutstugorDataPaths } from "../src/lib/server/scoutstugorDataPaths";
 
 type Args = {
 	olderThanDays?: number;
@@ -50,12 +50,18 @@ function daysSince(isoDate: string, now: Date): number | null {
 const args = parseArgs(process.argv.slice(2));
 const now = new Date();
 
-const JSON_PATH = resolve(process.cwd(), "data/scoutstugor.stockholm.json");
-const jsonText = await readFile(JSON_PATH, { encoding: "utf8" });
-const raw = JSON.parse(jsonText) as unknown;
-if (!Array.isArray(raw)) throw new Error("JSON måste vara en array.");
+const dataPaths = resolveScoutstugorDataPaths();
+const chunks: unknown[] = [];
 
-const items = (raw as unknown[])
+for (const dataPath of dataPaths) {
+	const jsonText = await readFile(dataPath, { encoding: "utf8" });
+	const raw = JSON.parse(jsonText) as unknown;
+	if (!Array.isArray(raw))
+		throw new Error(`JSON måste vara en array: ${dataPath}`);
+	chunks.push(...raw);
+}
+
+const items = chunks
 	.map((value) => {
 		const x = (value ?? {}) as Record<string, unknown>;
 		return {

@@ -162,7 +162,8 @@ function buildTripUrl(params: {
 	url.searchParams.set("format", "json");
 	url.searchParams.set("accessId", accessId);
 
-	if (params.originStopId) url.searchParams.set("originId", params.originStopId);
+	if (params.originStopId)
+		url.searchParams.set("originId", params.originStopId);
 	else {
 		url.searchParams.set("originCoordLat", String(params.origin.lat));
 		url.searchParams.set("originCoordLong", String(params.origin.lon));
@@ -266,9 +267,7 @@ export async function resrobotTrip(
 
 	let data: ResRobotTripResponse;
 	try {
-		data = await fetchTrip(
-			buildTripUrl({ origin, destination, departAtIso }),
-		);
+		data = await fetchTrip(buildTripUrl({ origin, destination, departAtIso }));
 	} catch (error) {
 		if (isNoNearbyStopsError(error)) {
 			const [originStop, destStop] = await Promise.all([

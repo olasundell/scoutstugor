@@ -1,6 +1,6 @@
 <script lang="ts">
-import { onMount } from "svelte";
 import flatpickr from "flatpickr";
+import { onMount } from "svelte";
 import "flatpickr/dist/flatpickr.min.css";
 import type { Scoutstuga } from "$lib/scoutstugor";
 import type { GeocodeResult } from "$lib/server/travel/graphhopper";

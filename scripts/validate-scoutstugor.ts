@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { resolveScoutstugorDataPaths } from "../src/lib/server/scoutstugorDataPaths";
 
 type ScoutstugaJson = {
 	id: string;
@@ -30,6 +30,12 @@ type ScoutstugaJson = {
 	bokningsKallaUrl?: string;
 	bokningsKallaNotering?: string;
 	senastKontrollerad?: string;
+	avstandBadplatsM?: number;
+	avstandMataffarM?: number;
+	avstandBadplatsBilM?: number;
+	avstandBadplatsGangM?: number;
+	avstandMataffarBilM?: number;
+	avstandMataffarGangM?: number;
 };
 
 function assertString(value: unknown, name: string): asserts value is string {
@@ -162,6 +168,24 @@ function validateAndNormalize(raw: unknown): {
 		assertOptionalString(obj.bokningsKallaUrl, "bokningsKallaUrl");
 		assertOptionalString(obj.bokningsKallaNotering, "bokningsKallaNotering");
 		assertOptionalString(obj.senastKontrollerad, "senastKontrollerad");
+		assertOptionalNonNegativeNumber(obj.avstandBadplatsM, "avstandBadplatsM");
+		assertOptionalNonNegativeNumber(obj.avstandMataffarM, "avstandMataffarM");
+		assertOptionalNonNegativeNumber(
+			obj.avstandBadplatsBilM,
+			"avstandBadplatsBilM",
+		);
+		assertOptionalNonNegativeNumber(
+			obj.avstandBadplatsGangM,
+			"avstandBadplatsGangM",
+		);
+		assertOptionalNonNegativeNumber(
+			obj.avstandMataffarBilM,
+			"avstandMataffarBilM",
+		);
+		assertOptionalNonNegativeNumber(
+			obj.avstandMataffarGangM,
+			"avstandMataffarGangM",
+		);
 
 		const id = obj.id.trim();
 		if (!id) throw new Error('Ogiltig data: "id" får inte vara tom.');
@@ -174,9 +198,20 @@ function validateAndNormalize(raw: unknown): {
 	return { items, uniqueIdCount: seen.size };
 }
 
-const JSON_PATH = resolve(process.cwd(), "data/scoutstugor.stockholm.json");
-const jsonText = await readFile(JSON_PATH, { encoding: "utf8" });
-const raw = JSON.parse(jsonText) as unknown;
-const { items, uniqueIdCount } = validateAndNormalize(raw);
+const dataPaths = resolveScoutstugorDataPaths();
+const chunks: unknown[] = [];
 
-console.log(`OK: ${items.length} rader, ${uniqueIdCount} unika id.`);
+for (const dataPath of dataPaths) {
+	const jsonText = await readFile(dataPath, { encoding: "utf8" });
+	const raw = JSON.parse(jsonText) as unknown;
+	if (!Array.isArray(raw)) {
+		throw new Error(`Ogiltig data: "${dataPath}" måste vara en array.`);
+	}
+	chunks.push(...raw);
+}
+
+const { items, uniqueIdCount } = validateAndNormalize(chunks);
+
+console.log(
+	`OK: ${items.length} rader, ${uniqueIdCount} unika id. (${dataPaths.length} filer)`,
+);

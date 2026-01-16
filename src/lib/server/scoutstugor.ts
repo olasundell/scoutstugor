@@ -1,8 +1,6 @@
 import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
 import type { Scoutstuga, ScoutstugaTyp } from "$lib/scoutstugor";
-
-const JSON_PATH = resolve(process.cwd(), "data/scoutstugor.stockholm.json");
+import { resolveScoutstugorDataPaths } from "./scoutstugorDataPaths";
 
 function extractEmails(value: string): string[] {
 	if (!value) return [];
@@ -41,6 +39,12 @@ type ScoutstugaJson = {
 	bokningsKallaUrl?: string;
 	bokningsKallaNotering?: string;
 	senastKontrollerad?: string;
+	avstandBadplatsM?: number;
+	avstandMataffarM?: number;
+	avstandBadplatsBilM?: number;
+	avstandBadplatsGangM?: number;
+	avstandMataffarBilM?: number;
+	avstandMataffarGangM?: number;
 };
 
 function assertString(value: unknown, name: string): asserts value is string {
@@ -173,6 +177,24 @@ function validateAndNormalize(raw: unknown): {
 		assertOptionalString(obj.bokningsKallaUrl, "bokningsKallaUrl");
 		assertOptionalString(obj.bokningsKallaNotering, "bokningsKallaNotering");
 		assertOptionalString(obj.senastKontrollerad, "senastKontrollerad");
+		assertOptionalNonNegativeNumber(obj.avstandBadplatsM, "avstandBadplatsM");
+		assertOptionalNonNegativeNumber(obj.avstandMataffarM, "avstandMataffarM");
+		assertOptionalNonNegativeNumber(
+			obj.avstandBadplatsBilM,
+			"avstandBadplatsBilM",
+		);
+		assertOptionalNonNegativeNumber(
+			obj.avstandBadplatsGangM,
+			"avstandBadplatsGangM",
+		);
+		assertOptionalNonNegativeNumber(
+			obj.avstandMataffarBilM,
+			"avstandMataffarBilM",
+		);
+		assertOptionalNonNegativeNumber(
+			obj.avstandMataffarGangM,
+			"avstandMataffarGangM",
+		);
 
 		const id = obj.id.trim();
 		if (!id) throw new Error('Ogiltig data: "id" får inte vara tom.');
@@ -208,6 +230,12 @@ function validateAndNormalize(raw: unknown): {
 			bokningsKallaUrl: obj.bokningsKallaUrl,
 			bokningsKallaNotering: obj.bokningsKallaNotering,
 			senastKontrollerad: obj.senastKontrollerad,
+			avstandBadplatsM: obj.avstandBadplatsM,
+			avstandMataffarM: obj.avstandMataffarM,
+			avstandBadplatsBilM: obj.avstandBadplatsBilM,
+			avstandBadplatsGangM: obj.avstandBadplatsGangM,
+			avstandMataffarBilM: obj.avstandMataffarBilM,
+			avstandMataffarGangM: obj.avstandMataffarGangM,
 		});
 	}
 
@@ -215,9 +243,26 @@ function validateAndNormalize(raw: unknown): {
 }
 
 export async function loadScoutstugor(): Promise<Scoutstuga[]> {
-	const jsonText = await readFile(JSON_PATH, { encoding: "utf8" });
-	const raw = JSON.parse(jsonText) as unknown;
-	const { items } = validateAndNormalize(raw);
+	const dataPaths = resolveScoutstugorDataPaths();
+	const chunks: unknown[] = [];
+
+	for (const dataPath of dataPaths) {
+		const jsonText = await readFile(dataPath, { encoding: "utf8" });
+		let raw: unknown;
+		try {
+			raw = JSON.parse(jsonText) as unknown;
+		} catch {
+			throw new Error(
+				`Ogiltig data: "${dataPath}" kunde inte tolkas som JSON.`,
+			);
+		}
+		if (!Array.isArray(raw)) {
+			throw new Error(`Ogiltig data: "${dataPath}" måste vara en array.`);
+		}
+		chunks.push(...raw);
+	}
+
+	const { items } = validateAndNormalize(chunks);
 
 	const out: Scoutstuga[] = items.map((item) => ({
 		...item,

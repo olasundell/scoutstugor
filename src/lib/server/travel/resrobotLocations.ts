@@ -20,7 +20,10 @@ type ResRobotLocationNameResponse = {
 	};
 };
 
-function parseLatLon(lat?: string, lon?: string): { lat: number; lon: number } | null {
+function parseLatLon(
+	lat?: string,
+	lon?: string,
+): { lat: number; lon: number } | null {
 	if (!lat || !lon) return null;
 	const la = Number.parseFloat(lat);
 	const lo = Number.parseFloat(lon);
@@ -90,4 +93,3 @@ export async function resrobotLocationNameGeocode(
 		clear();
 	}
 }
-

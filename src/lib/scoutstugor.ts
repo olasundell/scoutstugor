@@ -64,4 +64,12 @@ export type Scoutstuga = {
 	 */
 	bokningsKallaNotering?: string;
 	senastKontrollerad?: string; // ISO 8601 date
+
+	// Optional enrichment (nearby distances in meters)
+	avstandBadplatsM?: number;
+	avstandMataffarM?: number;
+	avstandBadplatsBilM?: number;
+	avstandBadplatsGangM?: number;
+	avstandMataffarBilM?: number;
+	avstandMataffarGangM?: number;
 };

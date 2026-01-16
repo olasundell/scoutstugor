@@ -1,6 +1,6 @@
 <script lang="ts">
-import { onMount } from "svelte";
 import flatpickr from "flatpickr";
+import { onMount } from "svelte";
 import "flatpickr/dist/flatpickr.min.css";
 import type { Scoutstuga } from "$lib/scoutstugor";
 import type { GeocodeResult } from "$lib/server/travel/graphhopper";
@@ -66,8 +66,9 @@ const resultsVm = $derived.by(() => {
 	const departAt = parseIsoLocalDatetime(departLocal);
 	if (!result) return null;
 
-	const carArriveAtIso =
-		departAt ? new Date(departAt.getTime() + result.car.durationMs).toISOString() : null;
+	const carArriveAtIso = departAt
+		? new Date(departAt.getTime() + result.car.durationMs).toISOString()
+		: null;
 	const carDepartAtIso = departAt ? departAt.toISOString() : null;
 
 	let walkDurationMs = 0;
@@ -81,8 +82,7 @@ const resultsVm = $derived.by(() => {
 	}
 
 	const diffMs = result.pt.durationMs - result.car.durationMs; // + => car faster
-	const fastest =
-		Math.abs(diffMs) < 60_000 ? "tie" : diffMs > 0 ? "car" : "pt";
+	const fastest = Math.abs(diffMs) < 60_000 ? "tie" : diffMs > 0 ? "car" : "pt";
 
 	const deltaText =
 		fastest === "tie"

@@ -1,5 +1,11 @@
 <script lang="ts">
-import type { DivIcon, LayerGroup, Map as LeafletMap, Marker } from "leaflet";
+import type {
+	DivIcon,
+	LayerGroup,
+	Map as LeafletMap,
+	Marker,
+	Popup,
+} from "leaflet";
 import { onMount } from "svelte";
 import scoutLilja from "$lib/assets/scoutlilja.png";
 import type { Scoutstuga } from "$lib/scoutstugor";
@@ -7,9 +13,11 @@ import type { Scoutstuga } from "$lib/scoutstugor";
 let {
 	stugor,
 	focusedId,
+	onSelect,
 }: {
 	stugor: Scoutstuga[];
 	focusedId?: string | null;
+	onSelect?: (id: string) => void;
 } = $props();
 
 let container: HTMLDivElement | null = $state(null);
@@ -63,6 +71,23 @@ ${mail}
 </div>`;
 }
 
+function panPopupToTop(popup: Popup) {
+	if (!map) return;
+	const container = map.getContainer();
+	const popupEl = popup.getElement();
+	if (!popupEl) return;
+
+	requestAnimationFrame(() => {
+		if (!map) return;
+		const containerRect = container.getBoundingClientRect();
+		const popupRect = popupEl.getBoundingClientRect();
+		const desiredTop = containerRect.top + 12;
+		const delta = popupRect.top - desiredTop;
+		if (Math.abs(delta) < 1) return;
+		map.panBy([0, delta], { animate: true });
+	});
+}
+
 function updateMarkers() {
 	if (!leaflet || !map || !markersLayer || !scoutIcon) return;
 
@@ -78,6 +103,9 @@ function updateMarkers() {
 			icon: scoutIcon,
 		});
 		marker.bindPopup(buildPopupHtml(stuga));
+		marker.on("click", () => {
+			onSelect?.(stuga.id);
+		});
 		marker.addTo(markersLayer);
 		markersById.set(stuga.id, marker);
 	}
@@ -129,6 +157,10 @@ onMount(() => {
 			center: [59.3293, 18.0686],
 			zoom: 9,
 			scrollWheelZoom: false,
+		});
+
+		map.on("popupopen", (event) => {
+			panPopupToTop(event.popup);
 		});
 
 		// Cmd/Ctrl + scroll should zoom the map.
@@ -220,10 +252,10 @@ $effect(() => {
 	if (!focusedId || !map) return;
 	const marker = markersById.get(focusedId);
 	if (!marker) return;
-	marker.openPopup();
 	map.setView(marker.getLatLng(), Math.max(map.getZoom(), 13), {
 		animate: true,
 	});
+	marker.openPopup();
 });
 </script>
 

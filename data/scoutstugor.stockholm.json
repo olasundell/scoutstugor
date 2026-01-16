@@ -26,7 +26,11 @@
 		"bokningslank": "mailto:info@sanctamaria.se",
 		"bokningsKallaUrl": "https://sanctamaria.scout.se/vara-scoutstugor/palstorp-2/",
 		"bokningsKallaNotering": "Bokning via e-post enligt Pålstorps sida.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 4765,
+		"avstandBadplatsGangM": 4987,
+		"avstandMataffarBilM": 5636,
+		"avstandMataffarGangM": 4399
 	},
 	{
 		"id": "botkyrka-scoutlokal-peter-momma-grodinge",
@@ -44,7 +48,11 @@
 		"noggrannhet": "område (låg)",
 		"omStuganUrl": "https://www.scouterna.se/hitta-scoutkar/stockholms-lan/botkyrka-kommun/scoutkaren-peter-momma/",
 		"karUrl": "http://www.petermomma.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 5100,
+		"avstandBadplatsGangM": 5089,
+		"avstandMataffarBilM": 4505,
+		"avstandMataffarGangM": 4276
 	},
 	{
 		"id": "botkyrka-scoutstugan-malmsjovagen",
@@ -62,7 +70,11 @@
 		"noggrannhet": "adress (hög)",
 		"omStuganUrl": "https://www.scouterna.se/hitta-scoutkar/stockholms-lan/botkyrka-kommun/scoutkaren-peter-momma/",
 		"karUrl": "http://www.petermomma.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 1375,
+		"avstandBadplatsGangM": 1035,
+		"avstandMataffarBilM": 1221,
+		"avstandMataffarGangM": 1220
 	},
 	{
 		"id": "botkyrka-tullinge-scoutstuga",
@@ -80,7 +92,11 @@
 		"noggrannhet": "adress (hög)",
 		"omStuganUrl": "https://stb.scout.se/kontakt/",
 		"karUrl": "https://stb.scout.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 1615,
+		"avstandBadplatsGangM": 1278,
+		"avstandMataffarBilM": 1956,
+		"avstandMataffarGangM": 1415
 	},
 	{
 		"id": "danderyd-oskarsborg",
@@ -108,7 +124,11 @@
 		"bokningslank": "mailto:stughyra@danderydssjoscoutkar.se",
 		"bokningsKallaUrl": "https://www.danderydssjoscoutkar.se/Kontakta_oss",
 		"bokningsKallaNotering": "Kontaktsidan: \"Vill du hyra scoutstugan Oskarsborg kontakta\".",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2645,
+		"avstandBadplatsGangM": 2327,
+		"avstandMataffarBilM": 1052,
+		"avstandMataffarGangM": 988
 	},
 	{
 		"id": "danderyd-scoutstugan-ranangen",
@@ -137,7 +157,11 @@
 		"bokningslank": "https://sites.google.com/djursholmsscoutkar.se/start/hyr-stugan/s%C3%A5-g%C3%A5r-det-till",
 		"bokningsKallaUrl": "https://sites.google.com/djursholmsscoutkar.se/start/hyr-stugan/s%C3%A5-g%C3%A5r-det-till",
 		"bokningsKallaNotering": "Bokningsförfrågan via stugfogde@djursholmsscoutkar.se enligt sidan.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 1300,
+		"avstandBadplatsGangM": 1386,
+		"avstandMataffarBilM": 1601,
+		"avstandMataffarGangM": 1601
 	},
 	{
 		"id": "danderyd-stocksunds-scoutstuga",
@@ -158,7 +182,11 @@
 		"bokningslank": "mailto:scoutstugan.stocksund@gmail.com",
 		"bokningsKallaUrl": "https://stocksund.scout.se/scoutkar/hyra-scoutstugan/",
 		"bokningsKallaNotering": "Hyra Scoutstugan-sidan anger e-post för bokning.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2160,
+		"avstandBadplatsGangM": 2288,
+		"avstandMataffarBilM": 544,
+		"avstandMataffarGangM": 532
 	},
 	{
 		"id": "ekero-k2",
@@ -184,7 +212,11 @@
 		"prisKallaUrl": "https://malarscouterna.se/om/lokaler/k2/2519-ny-prissaettning-foer-k2-fran-1-1-2025",
 		"bokningslank": "https://malarscouterna.se/om/lokaler/k2",
 		"bokningsKallaUrl": "https://malarscouterna.se/om/lokaler/k2",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2190,
+		"avstandBadplatsGangM": 2392,
+		"avstandMataffarBilM": 7279,
+		"avstandMataffarGangM": 7875
 	},
 	{
 		"id": "ekero-l13",
@@ -209,7 +241,11 @@
 		"prisinfo": "1 500 kr per helg, 500 kr per vardagsdygn.",
 		"prisKallaUrl": "https://scoutstuga.se/accommodation/169616475345290/L13_Lovo",
 		"prisKallaNotering": "Hittat via scoutstuga.se: sökterm 'L13' → Pris-sektionen på boendesidan.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 912,
+		"avstandBadplatsGangM": 1068,
+		"avstandMataffarBilM": 9736,
+		"avstandMataffarGangM": 10012
 	},
 	{
 		"id": "ekero-lugnet",
@@ -233,7 +269,11 @@
 		"prisinfo": "500 kr per helg, 250 kr per vardagsdygn. Faktura kommer efter bokat datum.",
 		"prisKallaUrl": "https://scoutstuga.se/accommodation/16961656463707/Lugnet_Lovo",
 		"prisKallaNotering": "Hittat via scoutstuga.se: sökterm 'Lugnet' → Pris-sektionen på boendesidan.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 4013,
+		"avstandBadplatsGangM": 4322,
+		"avstandMataffarBilM": 2483,
+		"avstandMataffarGangM": 4061
 	},
 	{
 		"id": "ekero-rovarkulan",
@@ -262,7 +302,11 @@
 		"bokningslank": "https://vinstascoutkar.se/rovarkulan/",
 		"bokningsKallaUrl": "https://vinstascoutkar.se/rovarkulan/",
 		"bokningsKallaNotering": "Hittat via Bromma KFUM-sidan: länk till Vinsta Scoutkår (uthyrning/lediga datum).",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2190,
+		"avstandBadplatsGangM": 2392,
+		"avstandMataffarBilM": 7279,
+		"avstandMataffarGangM": 7875
 	},
 	{
 		"id": "ekero-sundsgarden",
@@ -280,7 +324,11 @@
 		"noggrannhet": "område (låg)",
 		"omStuganUrl": "https://scoutkansliet.se/lagergardar-stugor/attachment/sundsgarden-faringso/",
 		"karUrl": "https://scoutkansliet.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2160,
+		"avstandBadplatsGangM": 2105,
+		"avstandMataffarBilM": 1576,
+		"avstandMataffarGangM": 1552
 	},
 	{
 		"id": "haninge-scoutlokalen-rudan",
@@ -305,7 +353,11 @@
 		"bokningslank": "https://handenscoutkar.scout.se/scoutlokalen/uthyrningsdatum-lokalen/",
 		"bokningsKallaUrl": "https://handenscoutkar.scout.se/scoutlokalen/",
 		"bokningsKallaNotering": "På sidan 'Scoutlokalen' finns länk 'För tillgänglighet se här när är lokalen ledig'.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 75,
+		"avstandBadplatsGangM": 307,
+		"avstandMataffarBilM": 5023,
+		"avstandMataffarGangM": 893
 	},
 	{
 		"id": "haninge-svartbacken-scoutlokal",
@@ -323,7 +375,11 @@
 		"noggrannhet": "adress/område (medel)",
 		"omStuganUrl": "https://www.scouterna.se/hitta-scoutkar/stockholms-lan/haninge-kommun/vendelso-scoutkar/",
 		"karUrl": "https://www.scouterna.se/hitta-scoutkar/stockholms-lan/haninge-kommun/vendelso-scoutkar/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 1817,
+		"avstandBadplatsGangM": 2017,
+		"avstandMataffarBilM": 1658,
+		"avstandMataffarGangM": 1984
 	},
 	{
 		"id": "haninge-ostnora-scoutstuga",
@@ -345,7 +401,11 @@
 		"vatten": true,
 		"vattenTyp": "inne",
 		"toalett": "inne",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 5951,
+		"avstandBadplatsGangM": 0,
+		"avstandMataffarBilM": 8005,
+		"avstandMataffarGangM": 0
 	},
 	{
 		"id": "huddinge-frakenbotten",
@@ -371,7 +431,11 @@
 		"prisKallaUrl": "https://www.karrtorpsscoutkar.nu/wp-content/uploads/2025/03/Nya-Hyror-Uthyrning-av-Frakenbotten-under-ar-2025.pdf",
 		"bokningslank": "https://www.karrtorpsscoutkar.nu/stugan/hyr-stugan/",
 		"bokningsKallaUrl": "https://www.karrtorpsscoutkar.nu/stugan/hyr-stugan/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 700,
+		"avstandBadplatsGangM": 700,
+		"avstandMataffarBilM": 6136,
+		"avstandMataffarGangM": 5559
 	},
 	{
 		"id": "huddinge-glado-scoutstuga",
@@ -400,7 +464,11 @@
 		"bokningslank": "https://web.cdn.scouterna.net/uploads/sites/323/2023/06/information-glado-hyra.pdf",
 		"bokningsKallaUrl": "https://web.cdn.scouterna.net/uploads/sites/323/2023/06/information-glado-hyra.pdf",
 		"bokningsKallaNotering": "Informationsblad (PDF) med bokningskontakt.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 3357,
+		"avstandBadplatsGangM": 3347,
+		"avstandMataffarBilM": 11336,
+		"avstandMataffarGangM": 4441
 	},
 	{
 		"id": "huddinge-kvarnbergsgarden",
@@ -424,7 +492,11 @@
 		"bokningslank": "https://www.huddinge.se/fritid-natur-och-kultur/lokal-och-anlaggning/boka-lokal/",
 		"bokningsKallaUrl": "https://huddinge.scout.se/vara_hus/kvarnberget/",
 		"bokningsKallaNotering": "Kårens sida hänvisar till Huddinge kommuns bokningssida.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 5755,
+		"avstandBadplatsGangM": 3852,
+		"avstandMataffarBilM": 764,
+		"avstandMataffarGangM": 506
 	},
 	{
 		"id": "huddinge-utfardsstugan-adalen",
@@ -450,7 +522,11 @@
 		"prisKallaUrl": "https://www.ornsberg.org/anlaggningar/adalen/",
 		"bokningslank": "https://www.ornsberg.org/anlaggningar/adalen/",
 		"bokningsKallaUrl": "https://www.ornsberg.org/anlaggningar/adalen/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 3647,
+		"avstandBadplatsGangM": 3155,
+		"avstandMataffarBilM": 6402,
+		"avstandMataffarGangM": 8646
 	},
 	{
 		"id": "jarfalla-fjallvik-scoutlokal",
@@ -475,7 +551,11 @@
 		"bokningslank": "https://viksjo.scout.se/scoutlokalen/fjallvik/",
 		"bokningsKallaUrl": "https://viksjo.scout.se/scoutlokalen/fjallvik/",
 		"bokningsKallaNotering": "Bokning sker via formulär/sidan på viksjo.scout.se (kalender + kontakt).",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2412,
+		"avstandBadplatsGangM": 2268,
+		"avstandMataffarBilM": 754,
+		"avstandMataffarGangM": 813
 	},
 	{
 		"id": "jarfalla-lyan",
@@ -502,7 +582,11 @@
 		"bokningslank": "mailto:lyan@bask-scoutkar.se",
 		"bokningsKallaUrl": "https://bask.scout.se/lokaler/lyan/",
 		"bokningsKallaNotering": "På sidan 'Hyra Lyan' står att man ska kontakta (maila) lyan@bask-scoutkar.se; bokningskalender finns längre ner på samma sida.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 0,
+		"avstandBadplatsGangM": 78,
+		"avstandMataffarBilM": 2273,
+		"avstandMataffarGangM": 2682
 	},
 	{
 		"id": "jarfalla-slammertorp",
@@ -530,7 +614,11 @@
 		"bokningslank": "mailto:stugbokning@kallhallscout.se",
 		"bokningsKallaUrl": "https://kallhall.scout.se/hyr-slammertorp/",
 		"bokningsKallaNotering": "På 'Hyr Slammertorp' står att man ska kontrollera kalendern och maila stugbokning@kallhallscout.se.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2533,
+		"avstandBadplatsGangM": 757,
+		"avstandMataffarBilM": 2204,
+		"avstandMataffarGangM": 1203
 	},
 	{
 		"id": "jarfalla-stubben",
@@ -559,7 +647,11 @@
 		"bokningslank": "mailto:info.jkbscout@gmail.com",
 		"bokningsKallaUrl": "https://jakobsberg.scout.se/om-karen/hyr-scoutlokalen/",
 		"bokningsKallaNotering": "Bokning via e-post enligt Hyr scoutstugan.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 4012,
+		"avstandBadplatsGangM": 3444,
+		"avstandMataffarBilM": 1234,
+		"avstandMataffarGangM": 1232
 	},
 	{
 		"id": "jarfalla-vardkasen",
@@ -587,7 +679,11 @@
 		"bokningslank": "https://docs.google.com/forms/d/e/1FAIpQLScT5tURgNv1nhG8VcSmAUFnp2kTpVWESbGdF12E0IhNvM-BIg/viewform?usp=sf_link",
 		"bokningsKallaUrl": "https://bask.scout.se/lokaler/vardkasen/",
 		"bokningsKallaNotering": "På sidan 'Hyra Vårdkasen' finns länk 'Hyresformulär Vårdkasen' samt bokningskalender längre ner.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 5200,
+		"avstandBadplatsGangM": 4785,
+		"avstandMataffarBilM": 966,
+		"avstandMataffarGangM": 901
 	},
 	{
 		"id": "lidingo-durken",
@@ -605,7 +701,11 @@
 		"noggrannhet": "adress/område (medel)",
 		"omStuganUrl": "https://www.svenskalag.se/lbo/sida/58585/om-karen",
 		"karUrl": "https://www.svenskalag.se/lbo/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 1509,
+		"avstandBadplatsGangM": 1662,
+		"avstandMataffarBilM": 652,
+		"avstandMataffarGangM": 551
 	},
 	{
 		"id": "lidingo-sommarvillan",
@@ -623,7 +723,11 @@
 		"noggrannhet": "område (låg)",
 		"omStuganUrl": "https://www.scouterna.se/hitta-scoutkar/stockholms-lan/lidingo-kommun/norra-lidingo-sjoscoutkar/",
 		"karUrl": "https://www.scouterna.se/hitta-scoutkar/stockholms-lan/lidingo-kommun/norra-lidingo-sjoscoutkar/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 3671,
+		"avstandBadplatsGangM": 2449,
+		"avstandMataffarBilM": 1493,
+		"avstandMataffarGangM": 1498
 	},
 	{
 		"id": "nacka-briggen",
@@ -652,7 +756,11 @@
 		"bokningslank": "https://forms.gle/dqiVgg2bHN36PzFCA",
 		"bokningsKallaUrl": "https://saltsjobaden.scout.se/anlaggningar/briggen-2/hyr-briggen/",
 		"bokningsKallaNotering": "Bokningsförfrågan via formulär på Hyr Briggen-sidan.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2795,
+		"avstandBadplatsGangM": 1821,
+		"avstandMataffarBilM": 2860,
+		"avstandMataffarGangM": 1290
 	},
 	{
 		"id": "nacka-landfastet",
@@ -670,7 +778,11 @@
 		"noggrannhet": "adress (hög)",
 		"omStuganUrl": "https://www.scouterna.se/hitta-scoutkar/stockholms-lan/nacka-kommun/nacka-sjoscoutkar/",
 		"karUrl": "https://www.scouterna.se/hitta-scoutkar/stockholms-lan/nacka-kommun/nacka-sjoscoutkar/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 3274,
+		"avstandBadplatsGangM": 2229,
+		"avstandMataffarBilM": 3858,
+		"avstandMataffarGangM": 921
 	},
 	{
 		"id": "nacka-scoutlokal",
@@ -688,7 +800,11 @@
 		"noggrannhet": "adress/område (medel)",
 		"omStuganUrl": "https://www.nsf.scout.se/karer/nacka-boo-scoutkar/",
 		"karUrl": "https://www.nsf.scout.se/karer/nacka-boo-scoutkar/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2364,
+		"avstandBadplatsGangM": 1734,
+		"avstandMataffarBilM": 352,
+		"avstandMataffarGangM": 343
 	},
 	{
 		"id": "nacka-scoutlokalen",
@@ -706,7 +822,11 @@
 		"noggrannhet": "adress (hög)",
 		"omStuganUrl": "https://saltsjoboo.scout.se/scoutlokalen/",
 		"karUrl": "https://saltsjoboo.scout.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 1904,
+		"avstandBadplatsGangM": 1660,
+		"avstandMataffarBilM": 1660,
+		"avstandMataffarGangM": 634
 	},
 	{
 		"id": "nacka-ornboet",
@@ -734,7 +854,33 @@
 		"bokningslank": "https://forms.gle/dHxh9y5fxf9xwtUF7",
 		"bokningsKallaUrl": "https://saltsjobaden.scout.se/anlaggningar/ornboet/hyr-ornboet/",
 		"bokningsKallaNotering": "Bokningsförfrågan via formulär på Hyr Örnboet-sidan.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 1794,
+		"avstandBadplatsGangM": 1517,
+		"avstandMataffarBilM": 4369,
+		"avstandMataffarGangM": 2022
+	},
+	{
+		"id": "norrtalje-narvenstugan",
+		"kommun": "Norrtälje",
+		"namn": "Narvenstugan",
+		"organisation": "Norrtälje Sjöscoutkår",
+		"typ": "Scoutstuga",
+		"platsAdress": "Narvenvägens ände, 761 75 Norrtälje",
+		"epost": "norrtaljescout@gmail.com",
+		"telefon": "",
+		"ovrigt": "Möteslokal under sommarhalvåret för segling och sjöverksamhet.",
+		"latitud": 59.77,
+		"longitud": 18.7868,
+		"koordinatKalla": "norrtalje.scout.se (Kontakt)",
+		"noggrannhet": "koordinat (hög)",
+		"omStuganUrl": "https://norrtalje.scout.se/kontakt/",
+		"karUrl": "https://norrtalje.scout.se/",
+		"senastKontrollerad": "2026-01-15",
+		"avstandBadplatsBilM": 501,
+		"avstandBadplatsGangM": 501,
+		"avstandMataffarBilM": 4831,
+		"avstandMataffarGangM": 4831
 	},
 	{
 		"id": "norrtalje-norrtalje-malsta-motesplats",
@@ -752,7 +898,11 @@
 		"noggrannhet": "adress (hög)",
 		"omStuganUrl": "https://www.svenskakyrkan.se/roslagens-ostra-pastorat/markuskyrkan",
 		"karUrl": "https://www.svenskakyrkan.se/roslagens-ostra-pastorat/norrtalje-malsta",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 3741,
+		"avstandBadplatsGangM": 3042,
+		"avstandMataffarBilM": 527,
+		"avstandMataffarGangM": 507
 	},
 	{
 		"id": "norrtalje-vassaro-scouto-anlaggning",
@@ -776,7 +926,11 @@
 		"prisKallaUrl": "https://vassaro.se/lager/scoutlager/bokning/",
 		"bokningslank": "https://vassaro.se/lager/scoutlager/bokning/",
 		"bokningsKallaUrl": "https://vassaro.se/lager/scoutlager/bokning/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 10599,
+		"avstandBadplatsGangM": 7247,
+		"avstandMataffarBilM": 7770,
+		"avstandMataffarGangM": 7688
 	},
 	{
 		"id": "nykvarn-knopis-de-lux",
@@ -794,7 +948,11 @@
 		"noggrannhet": "adress/område (medel)",
 		"omStuganUrl": "https://turinge.scout.se/scoutlokalen/",
 		"karUrl": "https://turinge.scout.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2679,
+		"avstandBadplatsGangM": 2592,
+		"avstandMataffarBilM": 1122,
+		"avstandMataffarGangM": 952
 	},
 	{
 		"id": "nynashamn-blockis",
@@ -812,7 +970,11 @@
 		"noggrannhet": "koordinat (hög)",
 		"omStuganUrl": "https://nynashamn.scout.se/om-karen/vara-stugor-och-lokaler/blockis/",
 		"karUrl": "https://nynashamn.scout.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 8324,
+		"avstandBadplatsGangM": 2811,
+		"avstandMataffarBilM": 9681,
+		"avstandMataffarGangM": 7221
 	},
 	{
 		"id": "nynashamn-landberga",
@@ -837,7 +999,11 @@
 		"prisinfo": "1200 kr per helg.",
 		"prisKallaUrl": "https://scoutstuga.se/accommodation/169959341085320/Landbergastugan",
 		"prisKallaNotering": "Hittat via scoutstuga.se: sökterm 'Landberga' → Pris-sektionen på boendesidan.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 8642,
+		"avstandBadplatsGangM": 0,
+		"avstandMataffarBilM": 10205,
+		"avstandMataffarGangM": 0
 	},
 	{
 		"id": "nynashamn-sandhamnsstugan",
@@ -855,7 +1021,11 @@
 		"noggrannhet": "adress/område (medel)",
 		"omStuganUrl": "https://nynashamn.scout.se/om-karen/vara-stugor-och-lokaler/sandhamnsstugan/",
 		"karUrl": "https://nynashamn.scout.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 393,
+		"avstandBadplatsGangM": 394,
+		"avstandMataffarBilM": 984,
+		"avstandMataffarGangM": 984
 	},
 	{
 		"id": "sigtuna-orrgarden",
@@ -880,7 +1050,11 @@
 		"bokningslank": "https://rosersberg.scout.se/hyra-orrgarden-maila-oss-pa-bokning-orrgardengmail-com/",
 		"bokningsKallaUrl": "https://rosersberg.scout.se/hyra-orrgarden-maila-oss-pa-bokning-orrgardengmail-com/",
 		"bokningsKallaNotering": "Bokningskontakt (mail) står på samma sida.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2813,
+		"avstandBadplatsGangM": 2854,
+		"avstandMataffarBilM": 354,
+		"avstandMataffarGangM": 354
 	},
 	{
 		"id": "sigtuna-appelbo",
@@ -901,7 +1075,11 @@
 		"prisinfo": "Hyrs ej ut (\"Vi hyr inte ut Äppelbo\").",
 		"prisKallaUrl": "https://marsta.scout.se/om-karen/appelbo/",
 		"prisKallaNotering": "Hittat på Märsta Scoutkårs sida 'Äppelbo' (rad: 'Vi hyr inte ut Äppelbo.').",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 4710,
+		"avstandBadplatsGangM": 4321,
+		"avstandMataffarBilM": 606,
+		"avstandMataffarGangM": 597
 	},
 	{
 		"id": "sollentuna-holken",
@@ -931,7 +1109,11 @@
 		"bokningslank": "https://sollentunasodra.se/hyr-holken/",
 		"bokningsKallaUrl": "https://sollentunasodra.se/hyr-holken/",
 		"bokningsKallaNotering": "Bokningslänk till kårens sida fanns redan i listan.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 1861,
+		"avstandBadplatsGangM": 1094,
+		"avstandMataffarBilM": 1260,
+		"avstandMataffarGangM": 1022
 	},
 	{
 		"id": "sollentuna-kupan",
@@ -952,7 +1134,11 @@
 		"prisinfo": "Hyrs ej ut för tillfället.",
 		"prisKallaUrl": "https://sollentunanorra.scout.se/kontakt/",
 		"prisKallaNotering": "Kontaktsidan anger att Kupan inte hyrs ut för tillfället.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2280,
+		"avstandBadplatsGangM": 674,
+		"avstandMataffarBilM": 623,
+		"avstandMataffarGangM": 633
 	},
 	{
 		"id": "solna-hajkstugan-hajknas",
@@ -975,7 +1161,11 @@
 		"prisinfo": "Helg: 850 kr (för scoutkårer).",
 		"prisKallaUrl": "https://scoutstuga.se/accommodation/16282432745563/Hajknas",
 		"prisKallaNotering": "Hittat via scoutstuga.se: sökterm 'Hajknäs' → Pris-sektionen på boendesidan.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 3830,
+		"avstandBadplatsGangM": 2756,
+		"avstandMataffarBilM": 3018,
+		"avstandMataffarGangM": 2856
 	},
 	{
 		"id": "stockholm-brobergska-scoutkaren-avdelningslokaler",
@@ -993,7 +1183,11 @@
 		"noggrannhet": "adress (hög)",
 		"omStuganUrl": "https://brobergska.se/kontakt/",
 		"karUrl": "https://brobergska.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2328,
+		"avstandBadplatsGangM": 1124,
+		"avstandMataffarBilM": 173,
+		"avstandMataffarGangM": 176
 	},
 	{
 		"id": "stockholm-hasselby-scoutkar-scoutlokal",
@@ -1011,7 +1205,11 @@
 		"noggrannhet": "adress (hög)",
 		"omStuganUrl": "https://hasselby.scout.se/lokaler/scoutlokalen/",
 		"karUrl": "https://hasselby.scout.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 1585,
+		"avstandBadplatsGangM": 1772,
+		"avstandMataffarBilM": 477,
+		"avstandMataffarGangM": 446
 	},
 	{
 		"id": "stockholm-hasselby-strands-sjoscoutkar-lokal",
@@ -1033,7 +1231,11 @@
 		"bokningslank": "mailto:myset.hss.scout@gmail.com",
 		"bokningsKallaUrl": "https://hss.scout.se/lokaler/myset/",
 		"bokningsKallaNotering": "Bokningsförfrågan via e-post enligt Myset-sidan.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 842,
+		"avstandBadplatsGangM": 1241,
+		"avstandMataffarBilM": 3619,
+		"avstandMataffarGangM": 2334
 	},
 	{
 		"id": "stockholm-malarhojdens-scoutkar-kaken",
@@ -1054,7 +1256,11 @@
 		"prisinfo": "Kontakta Mälarhöjdens Scoutkår för prisuppgift.",
 		"prisKallaUrl": "https://www.scouterna.se/hitta-scoutkar/stockholms-lan/stockholms-kommun/malarhojdens-scoutkar/",
 		"prisKallaNotering": "Scoutstuga.se-sidan som hittades via sökterm 'Kåken' visade sig gälla en annan stuga (Bandhagens Scoutkår i Tyresta). Prisinfo för Mälarhöjdens Scoutkår finns inte på scoutstuga.se-sidan; använd kontaktuppgifter via scouterna.se.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 1884,
+		"avstandBadplatsGangM": 1906,
+		"avstandMataffarBilM": 938,
+		"avstandMataffarGangM": 922
 	},
 	{
 		"id": "stockholm-riddersvik-scoutstuga",
@@ -1084,7 +1290,11 @@
 		"bokningslank": "mailto:riddersvik@nockebyscout.se",
 		"bokningsKallaUrl": "https://nockeby.scout.se/scoutstuga/",
 		"bokningsKallaNotering": "Kontaktuppgifter på Scoutstuga Riddersvik-sidan.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 858,
+		"avstandBadplatsGangM": 1346,
+		"avstandMataffarBilM": 3322,
+		"avstandMataffarGangM": 1873
 	},
 	{
 		"id": "stockholm-s-ta-maria-scoutkar-bergsgruvan",
@@ -1105,7 +1315,11 @@
 		"prisinfo": "Hyrs ej ut (ej bokningsbar tillsvidare).",
 		"prisKallaUrl": "https://sanctamaria.scout.se/vara-scoutstugor/scouthuset-i-bergsgruvan/",
 		"prisKallaNotering": "Sidan anger att scouthuset inte är bokningsbart tillsvidare.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2792,
+		"avstandBadplatsGangM": 1378,
+		"avstandMataffarBilM": 710,
+		"avstandMataffarGangM": 196
 	},
 	{
 		"id": "stockholm-scoutgarden-rotundan",
@@ -1123,7 +1337,11 @@
 		"noggrannhet": "adress/område (medel)",
 		"omStuganUrl": "https://www.ornsberg.org/anlaggningar/rotundan/",
 		"karUrl": "https://www.ornsberg.org/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2109,
+		"avstandBadplatsGangM": 1876,
+		"avstandMataffarBilM": 485,
+		"avstandMataffarGangM": 304
 	},
 	{
 		"id": "stockholm-scoutlokalen-taggen",
@@ -1141,7 +1359,11 @@
 		"noggrannhet": "adress (hög)",
 		"omStuganUrl": "https://www.ornsberg.org/anlaggningar/taggen/",
 		"karUrl": "https://www.ornsberg.org/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2147,
+		"avstandBadplatsGangM": 1684,
+		"avstandMataffarBilM": 404,
+		"avstandMataffarGangM": 404
 	},
 	{
 		"id": "stockholm-spanga-scoutkar-scoutlokal",
@@ -1166,7 +1388,11 @@
 		"bokningslank": "https://www.spangascouterna.se/content/holken.html?p",
 		"bokningsKallaUrl": "https://www.spangascouterna.se/content/holken.html?p",
 		"bokningsKallaNotering": "Kontakt för uthyrning anges på samma sida (lokalfogde@spangascouterna.se).",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 5993,
+		"avstandBadplatsGangM": 5209,
+		"avstandMataffarBilM": 419,
+		"avstandMataffarGangM": 294
 	},
 	{
 		"id": "stockholm-sodermalm-scoutkar-bygget",
@@ -1194,7 +1420,11 @@
 		"bokningslank": "mailto:evalndgrn51@gmail.com",
 		"bokningsKallaUrl": "https://sodermalm.scout.se/hyra-scoutstugan-bygget/",
 		"bokningsKallaNotering": "Bokning via e-post enligt Hyr Bygget-sidan.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 336,
+		"avstandBadplatsGangM": 1406,
+		"avstandMataffarBilM": 2048,
+		"avstandMataffarGangM": 2941
 	},
 	{
 		"id": "stockholm-vastertorps-scoutkar-lycksjohagen",
@@ -1216,7 +1446,11 @@
 		"vatten": true,
 		"vattenTyp": "pump",
 		"toalett": "ute",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2139,
+		"avstandBadplatsGangM": 1853,
+		"avstandMataffarBilM": 268,
+		"avstandMataffarGangM": 272
 	},
 	{
 		"id": "stockholm-avastugan",
@@ -1241,7 +1475,11 @@
 		"bokningslank": "https://boka.se/arstascoutkar",
 		"bokningsKallaUrl": "https://arsta.scout.se/vara-lokaler/",
 		"bokningsKallaNotering": "Bokning via boka.se enligt sidan Vara lokaler.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2925,
+		"avstandBadplatsGangM": 3156,
+		"avstandMataffarBilM": 11499,
+		"avstandMataffarGangM": 6894
 	},
 	{
 		"id": "sundbyberg-scoutlokal",
@@ -1259,7 +1497,11 @@
 		"noggrannhet": "adress/område (medel)",
 		"omStuganUrl": "https://sundbyberg.scout.se/om-karen/scoutlokalen/",
 		"karUrl": "https://sundbyberg.scout.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2965,
+		"avstandBadplatsGangM": 2149,
+		"avstandMataffarBilM": 424,
+		"avstandMataffarGangM": 404
 	},
 	{
 		"id": "sodertalje-mariekall-scoutkar-scoutlokal",
@@ -1277,7 +1519,11 @@
 		"noggrannhet": "adress/område (medel)",
 		"omStuganUrl": "https://mariekall.scout.se/scoutlokalen/",
 		"karUrl": "https://mariekall.scout.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 3904,
+		"avstandBadplatsGangM": 4063,
+		"avstandMataffarBilM": 592,
+		"avstandMataffarGangM": 564
 	},
 	{
 		"id": "sodertalje-sodertalje-sjoscoutkar-scoutlokal",
@@ -1295,7 +1541,11 @@
 		"noggrannhet": "adress/område (medel)",
 		"omStuganUrl": "https://sodertaljesjo.scout.se/kontakt/",
 		"karUrl": "https://sodertaljesjo.scout.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 506,
+		"avstandBadplatsGangM": 506,
+		"avstandMataffarBilM": 1678,
+		"avstandMataffarGangM": 1678
 	},
 	{
 		"id": "tyreso-drangstugan-alby",
@@ -1313,7 +1563,11 @@
 		"noggrannhet": "adress/område (medel)",
 		"omStuganUrl": "https://krusboda.scout.se/kontakt/",
 		"karUrl": "https://krusboda.scout.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 1475,
+		"avstandBadplatsGangM": 419,
+		"avstandMataffarBilM": 1821,
+		"avstandMataffarGangM": 1134
 	},
 	{
 		"id": "tyreso-fornudden",
@@ -1334,7 +1588,11 @@
 		"prisinfo": "Hyrs ej ut.",
 		"prisKallaUrl": "https://www.trollbackensscoutkar.se/start/scoutlokalen/fornuddsvagen/",
 		"prisKallaNotering": "Sidan anger att stugan inte hyrs ut.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 625,
+		"avstandBadplatsGangM": 598,
+		"avstandMataffarBilM": 877,
+		"avstandMataffarGangM": 775
 	},
 	{
 		"id": "tyreso-stordal",
@@ -1352,7 +1610,11 @@
 		"noggrannhet": "adress/område (medel)",
 		"omStuganUrl": "https://www.trollbackensscoutkar.se/start/scoutlokalen/",
 		"karUrl": "https://www.trollbackensscoutkar.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 12951,
+		"avstandBadplatsGangM": 2183,
+		"avstandMataffarBilM": 9355,
+		"avstandMataffarGangM": 9575
 	},
 	{
 		"id": "tyreso-tallborgen",
@@ -1378,7 +1640,11 @@
 		"prisinfo": "För scoutkår: fre–sön 2000 kr, lör–sön 1500 kr, vardag 500 kr per dag. Priser för privatpersoner, andra föreningar, företag eller organisationer: efter överenskommelse.",
 		"prisKallaUrl": "https://scoutstuga.se/accommodation/170904030053565/Tallborgen",
 		"prisKallaNotering": "Hittat via scoutstuga.se: sökterm 'Tallborgen' → Pris-sektionen på boendesidan.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 6402,
+		"avstandBadplatsGangM": 4039,
+		"avstandMataffarBilM": 8145,
+		"avstandMataffarGangM": 8021
 	},
 	{
 		"id": "taby-scoutgarden-uthyrning",
@@ -1403,7 +1669,11 @@
 		"bokningslank": "https://joti.tks-scout.se/scoutstugan",
 		"bokningsKallaUrl": "https://joti.tks-scout.se/scoutstugan",
 		"bokningsKallaNotering": "Bokning/pris via kontaktmail enligt joti-sidan.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2698,
+		"avstandBadplatsGangM": 2572,
+		"avstandMataffarBilM": 753,
+		"avstandMataffarGangM": 779
 	},
 	{
 		"id": "taby-scoutlokalen",
@@ -1421,7 +1691,11 @@
 		"noggrannhet": "nära adress (medel)",
 		"omStuganUrl": "https://www.scouterna.se/hitta-scoutkar/stockholms-lan/taby-kommun/nasby-parks-scoutkar/",
 		"karUrl": "https://www.scouterna.se/hitta-scoutkar/stockholms-lan/taby-kommun/nasby-parks-scoutkar/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 326,
+		"avstandBadplatsGangM": 240,
+		"avstandMataffarBilM": 903,
+		"avstandMataffarGangM": 1028
 	},
 	{
 		"id": "taby-scoutlokalen-2",
@@ -1439,7 +1713,11 @@
 		"noggrannhet": "adress/område (medel)",
 		"omStuganUrl": "https://viggbyholmssjoscoutkar.scout.se/kontakt/",
 		"karUrl": "https://viggbyholmssjoscoutkar.scout.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2105,
+		"avstandBadplatsGangM": 1841,
+		"avstandMataffarBilM": 600,
+		"avstandMataffarGangM": 611
 	},
 	{
 		"id": "upplands-vasby-scoutgarden",
@@ -1457,7 +1735,11 @@
 		"noggrannhet": "koordinat (hög)",
 		"omStuganUrl": "https://www.vasbyscout.se/huvudmeny/scoutgården",
 		"karUrl": "https://www.vasbyscout.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 4110,
+		"avstandBadplatsGangM": 4405,
+		"avstandMataffarBilM": 698,
+		"avstandMataffarGangM": 700
 	},
 	{
 		"id": "vallentuna-scoutstugan-liljan",
@@ -1479,7 +1761,11 @@
 		"vatten": true,
 		"vattenTyp": "inne",
 		"toalett": "inne",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 3303,
+		"avstandBadplatsGangM": 4502,
+		"avstandMataffarBilM": 943,
+		"avstandMataffarGangM": 880
 	},
 	{
 		"id": "vaxholm-scoutlokal-tillfallig",
@@ -1497,7 +1783,11 @@
 		"noggrannhet": "adress/område (medel)",
 		"omStuganUrl": "https://www.waxholmsscoutkar.se/kargemensamt/karnyheter/958-ny-tillfallig-lokal-for-waxholms-scoutkar-pa-lillvagen-7",
 		"karUrl": "https://www.waxholmsscoutkar.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 1414,
+		"avstandBadplatsGangM": 1411,
+		"avstandMataffarBilM": 488,
+		"avstandMataffarGangM": 550
 	},
 	{
 		"id": "varmdo-scoutstuga-batar",
@@ -1515,7 +1805,11 @@
 		"noggrannhet": "adress (hög)",
 		"omStuganUrl": "https://www.scouterna.se/hitta-scoutkar/stockholms-lan/varmdo-kommun/varmdo-sjoscoutkar/",
 		"karUrl": "https://www.scouterna.se/hitta-scoutkar/stockholms-lan/varmdo-kommun/varmdo-sjoscoutkar/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 118,
+		"avstandBadplatsGangM": 128,
+		"avstandMataffarBilM": 286,
+		"avstandMataffarGangM": 310
 	},
 	{
 		"id": "varmdo-skatboet",
@@ -1542,7 +1836,11 @@
 		"prisKallaUrl": "https://scoutkansliet.se/bokning-skatboet/",
 		"bokningslank": "https://skatboetvarmdo.se/boka/",
 		"bokningsKallaUrl": "https://skatboetvarmdo.se/boka/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 469,
+		"avstandBadplatsGangM": 1358,
+		"avstandMataffarBilM": 1172,
+		"avstandMataffarGangM": 1176
 	},
 	{
 		"id": "varmdo-vindalso-scouternas-anlaggning",
@@ -1563,7 +1861,11 @@
 		"prisinfo": "Se info om bokning/hyra via Stockholms Scoutskeppslags sida om Vindalsö.",
 		"prisKallaUrl": "https://stockholmsscoutskeppslag.scout.se/vindalso/",
 		"prisKallaNotering": "Tidigare länkade scoutstuga.se till stockholmsscoutskeppslag.se/Hyresdokument; den URL:en omdirigerar numera och gav 404. Uppdaterat till nuvarande Vindalsö-sida på stockholmsscoutskeppslag.scout.se.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 0,
+		"avstandBadplatsGangM": 0,
+		"avstandMataffarBilM": 650,
+		"avstandMataffarGangM": 1317
 	},
 	{
 		"id": "osteraker-husaro-scoutgard",
@@ -1592,7 +1894,11 @@
 		"bokningslank": "https://husaro.scout.se/hyr-scoutlokalen/bokningskalender/",
 		"bokningsKallaUrl": "https://husaro.scout.se/hyr-scoutlokalen/",
 		"bokningsKallaNotering": "Bokning via bokningskalender på uthyrningssidan.",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 0,
+		"avstandBadplatsGangM": 506,
+		"avstandMataffarBilM": 5115,
+		"avstandMataffarGangM": 953
 	},
 	{
 		"id": "osteraker-prasttorp",
@@ -1610,7 +1916,11 @@
 		"noggrannhet": "koordinat (hög)",
 		"omStuganUrl": "https://osteraker.scout.se/startsida/for-scoutledaren/prasttorp/",
 		"karUrl": "https://osteraker.scout.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-14",
+		"avstandBadplatsBilM": 2026,
+		"avstandBadplatsGangM": 2026,
+		"avstandMataffarBilM": 1427,
+		"avstandMataffarGangM": 1480
 	},
 	{
 		"id": "osteraker-uthyrning-stugor-kanoter",
@@ -1622,12 +1932,16 @@
 		"epost": "bokning@osterakersscoutkar.se",
 		"telefon": "",
 		"ovrigt": "Kårens adress (uthyrning: stugor ej specificerade).",
-		"latitud": 59.4909218,
-		"longitud": 18.3142955,
-		"koordinatKalla": "OSM Nominatim",
-		"noggrannhet": "område (låg)",
+		"latitud": 59.4904,
+		"longitud": 18.3143,
+		"koordinatKalla": "hitta.se (Backsippevägen 7)",
+		"noggrannhet": "adress (hög)",
 		"omStuganUrl": "https://www.scouterna.se/hitta-scoutkar/stockholms-lan/osterakers-kommun/osterakers-scoutkar/",
 		"karUrl": "https://osteraker.scout.se/",
-		"senastKontrollerad": "2026-01-14"
+		"senastKontrollerad": "2026-01-15",
+		"avstandBadplatsBilM": 3334,
+		"avstandBadplatsGangM": 3084,
+		"avstandMataffarBilM": 2007,
+		"avstandMataffarGangM": 1516
 	}
 ]
