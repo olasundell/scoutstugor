@@ -48,6 +48,7 @@ bun run avstand:poi -- --radius 20000 --candidates 5 --sleep 400 \
 ```
 
 Scriptet uppdaterar fälten `avstandBadplatsBilM`, `avstandBadplatsGangM`, `avstandMataffarBilM` och `avstandMataffarGangM`.
+Som standard beräknas bara stugor som saknar avstånd (använd `--force` eller `--recount` för att räkna om alla).
 
 #### OSRM Docker (lokalt)
 

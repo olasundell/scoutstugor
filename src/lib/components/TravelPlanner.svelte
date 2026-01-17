@@ -71,6 +71,7 @@ let departPicker: flatpickr.Instance | null = null;
 let loading = $state(false);
 let error = $state<string | null>(null);
 let result = $state<TravelResponse | null>(null);
+let selectedHikeIndex = $state(0);
 
 // Hike pace (km/h) for time estimate
 let hikePaceKmh = $state(4);
@@ -80,6 +81,17 @@ function isDirectResult(value: TravelResponse | null): value is TravelResponse &
 } {
 	return value?.mode === "direct";
 }
+
+const hikeVariants = $derived.by(() => {
+	if (!result || result.mode !== "hike") return [];
+	return [result.hike, ...result.hike.alternatives];
+});
+
+const currentHike = $derived.by(() => {
+	if (hikeVariants.length === 0) return null;
+	const idx = Math.min(selectedHikeIndex, hikeVariants.length - 1);
+	return hikeVariants[idx] ?? hikeVariants[0];
+});
 
 const resultsVm = $derived.by(() => {
 	const departAt = parseIsoLocalDatetime(departLocal);
@@ -415,12 +427,22 @@ $effect(() => {
 	}, 250);
 });
 
-let lastMode = $state<TravelMode>(mode);
+let lastMode = $state<TravelMode>("direct");
 $effect(() => {
 	if (mode === lastMode) return;
 	lastMode = mode;
 	error = null;
 	result = null;
+});
+
+$effect(() => {
+	if (!result || result.mode !== "hike") {
+		selectedHikeIndex = 0;
+		return;
+	}
+	if (selectedHikeIndex >= hikeVariants.length) {
+		selectedHikeIndex = 0;
+	}
 });
 
 async function compute() {
@@ -859,6 +881,7 @@ async function compute() {
 					</div>
 				</section>
 			{:else if result && result.mode === "hike"}
+				{@const hike = currentHike ?? result.hike}
 				<section class="resultWrap" aria-label="Resultat (vandring)">
 					<div class="resultSummary">
 						<div class="resultSummaryTop">
@@ -868,10 +891,25 @@ async function compute() {
 								<div class="resultSub">
 									<span>{hikeSelected?.label ?? "—"}</span>
 									<span class="sep" aria-hidden="true">·</span>
-									<span>{formatKm(result.hike.distanceM)}</span>
+									<span>{formatKm(hike.distanceM)}</span>
 								</div>
 							</div>
 						</div>
+						{#if hikeVariants.length > 1}
+							<div class="routeOptions" aria-label="Alternativa rutter">
+								{#each hikeVariants as variant, index (index)}
+									<button
+										class={`routeOption ${index === selectedHikeIndex ? "isActive" : ""}`}
+										type="button"
+										onclick={() => (selectedHikeIndex = index)}
+									>
+										Alternativ {index + 1}
+										<span class="sep" aria-hidden="true">·</span>
+										<span>{formatKm(variant.distanceM)}</span>
+									</button>
+								{/each}
+							</div>
+						{/if}
 						<dl class="summaryGrid">
 							<div>
 								<dt>Start</dt>
@@ -886,7 +924,7 @@ async function compute() {
 								<dd>
 									{formatDuration(
 										estimateHikeDurationMs(
-											result.hike.distanceM,
+											hike.distanceM,
 											hikePaceKmh,
 										),
 									)}
@@ -913,13 +951,13 @@ async function compute() {
 					<div class="resultGrid" aria-label="Höjd och distans">
 						<div class="resultCard">
 							<div class="resultTitle">Total distans</div>
-							<div class="resultValue">{formatKm(result.hike.distanceM)}</div>
+							<div class="resultValue">{formatKm(hike.distanceM)}</div>
 							<div class="resultMeta">Vandring, enligt OpenRouteService</div>
 						</div>
 						<div class="resultCard">
 							<div class="resultTitle">Stigning/sänkning</div>
 							<div class="resultValue">
-								{formatMeters(result.hike.ascentM)} / {formatMeters(result.hike.descentM)}
+								{formatMeters(hike.ascentM)} / {formatMeters(hike.descentM)}
 							</div>
 							<div class="resultMeta">Totalt upp och ner längs rutten</div>
 						</div>
@@ -932,14 +970,14 @@ async function compute() {
 								<span class="journeyDuration">
 									{formatDuration(
 										estimateHikeDurationMs(
-											result.hike.distanceM,
+											hike.distanceM,
 											hikePaceKmh,
 										),
 									)}
 								</span>
 							</div>
 						</div>
-						<ElevationProfile points={result.hike.profile} />
+						<ElevationProfile points={hike.profile} />
 						{#if result.deepLinks?.hikeGoogleMaps}
 							<a class="linkBtn" href={result.deepLinks.hikeGoogleMaps} target="_blank" rel="noreferrer">
 								Öppna rutt
@@ -947,15 +985,15 @@ async function compute() {
 						{/if}
 					</div>
 
-					{#if result.hike.route.length > 1}
+					{#if hike.route.length > 1}
 						<div class="journeyCard">
 							<div class="journeyHeader">
 								<div class="journeyTitle">Ruttkarta</div>
 								<div class="journeyMeta">
-									<span class="journeyDuration">{formatKm(result.hike.distanceM)}</span>
+									<span class="journeyDuration">{formatKm(hike.distanceM)}</span>
 								</div>
 							</div>
-							<HikeRouteMap route={result.hike.route} />
+							<HikeRouteMap route={hike.route} />
 						</div>
 					{/if}
 				</section>
@@ -1271,6 +1309,29 @@ async function compute() {
 	.paceValue {
 		font-size: 13px;
 		font-weight: 900;
+		color: #1d4ed8;
+	}
+
+	.routeOptions {
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
+	}
+
+	.routeOption {
+		border-radius: 999px;
+		padding: 6px 10px;
+		font-weight: 900;
+		cursor: pointer;
+		border: 1px solid rgba(15, 23, 42, 0.2);
+		background: rgba(255, 255, 255, 0.9);
+		color: #0f172a;
+		font-size: 12px;
+	}
+
+	.routeOption.isActive {
+		border-color: rgba(37, 99, 235, 0.5);
+		background: rgba(37, 99, 235, 0.12);
 		color: #1d4ed8;
 	}
 

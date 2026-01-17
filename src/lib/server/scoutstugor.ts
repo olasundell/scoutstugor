@@ -47,6 +47,42 @@ type ScoutstugaJson = {
 	avstandMataffarGangM?: number;
 };
 
+function isExplicitNotForRent(value: string): boolean {
+	const text = value.trim().toLowerCase();
+	if (!text) return false;
+
+	if (/^(ej|inte)\s+bokningsbar(t)?\b/.test(text)) return true;
+	if (!/^hyrs\s+(ej|inte)\s+ut\b/.test(text)) return false;
+
+	const rest = text.replace(/^hyrs\s+(ej|inte)\s+ut\b/, "").trim();
+	if (!rest) return true;
+	if (/^[.,;:()[\]"']/.test(rest)) return true;
+	if (
+		/^för\s+(tillfället|tillfallet|tillsvidare|närvarande|just\s+nu)\b/.test(
+			rest,
+		)
+	) {
+		return true;
+	}
+
+	return false;
+}
+
+export function isNotForRent(
+	stuga: Pick<
+		Scoutstuga,
+		"prisinfo" | "prisKallaNotering" | "bokningsKallaNotering"
+	>,
+): boolean {
+	const candidates = [
+		stuga.prisinfo,
+		stuga.prisKallaNotering,
+		stuga.bokningsKallaNotering,
+	].filter(Boolean);
+
+	return candidates.some((value) => isExplicitNotForRent(value ?? ""));
+}
+
 function assertString(value: unknown, name: string): asserts value is string {
 	if (typeof value !== "string") {
 		throw new Error(`Ogiltig data: "${name}" måste vara string.`);

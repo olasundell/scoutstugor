@@ -7,9 +7,11 @@ import TravelPlanner from "$lib/components/TravelPlanner.svelte";
 import type { PageData } from "./$types";
 
 let { data }: { data: PageData } = $props();
-const regionLabel = data.regionLabel;
-const pageTitle = `Scoutstugor i ${regionLabel}`;
-const pageDescription = `Lista över scoutstugor i ${regionLabel} med filtrering och kontaktuppgifter.`;
+const pageTitle = $derived.by(() => `Scoutstugor i ${data.regionLabel}`);
+const pageDescription = $derived.by(
+	() =>
+		`Lista över scoutstugor i ${data.regionLabel} med filtrering och kontaktuppgifter.`,
+);
 
 type TriStateYesNo = "" | "ja" | "nej";
 type ToalettFilter = "" | "inne" | "ute" | "båda" | "ingen";

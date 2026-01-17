@@ -6,7 +6,7 @@ Målet är att `data/scoutstugor*.json` ska vara single source of truth.
 
 - **`prisinfo`**: fri text med pris/regel eller “hyrs ej ut”.
 - **`prisKallaUrl`**: URL till sidan där `prisinfo` kommer ifrån.
-- **`prisKallaNotering`**: *hur* vi hittade källan (sökterm, menyväg, etc).
+- **`prisKallaNotering`**: _hur_ vi hittade källan (sökterm, menyväg, etc).
 - **`bokningslank`** / **`bokningsKallaUrl`** / **`bokningsKallaNotering`**: motsvarande för bokning.
 - **`senastKontrollerad`**: datum (ISO 8601, `YYYY-MM-DD`) när vi senast verifierade uppgiften.
 
@@ -44,4 +44,3 @@ Maskinläsbar output:
 ```bash
 bun run pris:recheck -- --json
 ```
-

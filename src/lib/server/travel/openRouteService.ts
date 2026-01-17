@@ -1,5 +1,9 @@
 import { env } from "$env/dynamic/private";
-import type { HikeProfilePoint, LatLon } from "$lib/travel/types";
+import type {
+	HikeProfilePoint,
+	HikeRouteVariant,
+	LatLon,
+} from "$lib/travel/types";
 
 type OrsDirectionsGeoJson = {
 	features?: Array<{
@@ -106,7 +110,9 @@ export async function openRouteServiceHikeRoute(
 	distanceM: number;
 	ascentM: number;
 	descentM: number;
+	route: LatLon[];
 	profile: HikeProfilePoint[];
+	alternatives: HikeRouteVariant[];
 }> {
 	const key = requireKey();
 	const url = new URL(`${baseUrl()}/v2/directions/foot-hiking/geojson`);
@@ -121,6 +127,10 @@ export async function openRouteServiceHikeRoute(
 		instructions: false,
 		geometry_simplify: false,
 		units: "m",
+		alternative_routes: {
+			target_count: 2,
+			share_factor: 0.6,
+		},
 	};
 
 	const res = await fetch(url, {
@@ -138,29 +148,37 @@ export async function openRouteServiceHikeRoute(
 	}
 
 	const data = (await res.json()) as OrsDirectionsGeoJson;
-	const feature = data.features?.[0];
-	const summary = feature?.properties?.summary;
-	const geometry = feature?.geometry;
-	const distance = summary?.distance;
-	const duration = summary?.duration;
-	const coords = geometry?.coordinates ?? [];
-
-	if (
-		typeof distance !== "number" ||
-		typeof duration !== "number" ||
-		coords.length < 2
-	) {
-		throw new Error("OpenRouteService returned unexpected payload");
+	const features = data.features ?? [];
+	if (features.length === 0) {
+		throw new Error("OpenRouteService returned no routes");
 	}
 
-	const { profile, ascentM, descentM, route } = buildProfile(coords);
+	const variants = features.map((feature) => {
+		const summary = feature?.properties?.summary;
+		const geometry = feature?.geometry;
+		const distance = summary?.distance;
+		const duration = summary?.duration;
+		const coords = geometry?.coordinates ?? [];
 
-	return {
-		durationMs: Math.round(duration * 1000),
-		distanceM: Math.round(distance),
-		ascentM,
-		descentM,
-		route,
-		profile,
-	};
+		if (
+			typeof distance !== "number" ||
+			typeof duration !== "number" ||
+			coords.length < 2
+		) {
+			throw new Error("OpenRouteService returned unexpected payload");
+		}
+
+		const { profile, ascentM, descentM, route } = buildProfile(coords);
+		return {
+			durationMs: Math.round(duration * 1000),
+			distanceM: Math.round(distance),
+			ascentM,
+			descentM,
+			route,
+			profile,
+		} satisfies HikeRouteVariant;
+	});
+
+	const [primary, ...alternatives] = variants;
+	return { ...primary, alternatives };
 }

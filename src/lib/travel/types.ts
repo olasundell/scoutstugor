@@ -74,13 +74,17 @@ export type HikeProfilePoint = {
 	elevationM: number;
 };
 
-export type HikeTravelResult = {
+export type HikeRouteVariant = {
 	durationMs: number;
 	distanceM: number;
 	ascentM: number;
 	descentM: number;
 	route: LatLon[];
 	profile: HikeProfilePoint[];
+};
+
+export type HikeTravelResult = HikeRouteVariant & {
+	alternatives: HikeRouteVariant[];
 };
 
 export type TravelDirectResponse = {

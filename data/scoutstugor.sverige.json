@@ -23,7 +23,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 50,
 		"el": true,
-		"vatten": false
+		"vatten": false,
+		"avstandBadplatsBilM": 5716,
+		"avstandBadplatsGangM": 4692,
+		"avstandMataffarBilM": 4010,
+		"avstandMataffarGangM": 3544
 	},
 	{
 		"id": "scoutstuga-162040232755800",
@@ -49,7 +53,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 25,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 8938,
+		"avstandBadplatsGangM": 6898,
+		"avstandMataffarBilM": 867,
+		"avstandMataffarGangM": 783
 	},
 	{
 		"id": "scoutstuga-171930951803637",
@@ -75,7 +83,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 20,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 314,
+		"avstandBadplatsGangM": 314,
+		"avstandMataffarBilM": 795,
+		"avstandMataffarGangM": 581
 	},
 	{
 		"id": "scoutstuga-170420418021393",
@@ -101,7 +113,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 25,
 		"el": false,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 2960,
+		"avstandBadplatsGangM": 2464,
+		"avstandMataffarBilM": 5310,
+		"avstandMataffarGangM": 4784
 	},
 	{
 		"id": "scoutstuga-162031021902500",
@@ -128,7 +144,11 @@
 		"sangar": 8,
 		"golvytaM2": 30,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 2818,
+		"avstandBadplatsGangM": 2971,
+		"avstandMataffarBilM": 1330,
+		"avstandMataffarGangM": 1015
 	},
 	{
 		"id": "scoutstuga-171437399372687",
@@ -154,7 +174,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 50,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 338,
+		"avstandBadplatsGangM": 348,
+		"avstandMataffarBilM": 283,
+		"avstandMataffarGangM": 283
 	},
 	{
 		"id": "scoutstuga-161831608586300",
@@ -179,7 +203,11 @@
 		"bokningsKallaUrl": "https://gilwell.scout.se/lageromradet-brittmass/",
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 6530,
+		"avstandBadplatsGangM": 6323,
+		"avstandMataffarBilM": 6263,
+		"avstandMataffarGangM": 5590
 	},
 	{
 		"id": "scoutstuga-161831535073700",
@@ -205,7 +233,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"sangar": 48,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 6593,
+		"avstandBadplatsGangM": 6593,
+		"avstandMataffarBilM": 6326,
+		"avstandMataffarGangM": 5860
 	},
 	{
 		"id": "scoutstuga-165450671988263",
@@ -232,7 +264,11 @@
 		"sangar": 18,
 		"golvytaM2": 7,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 3586,
+		"avstandBadplatsGangM": 2116,
+		"avstandMataffarBilM": 2535,
+		"avstandMataffarGangM": 2040
 	},
 	{
 		"id": "scoutstuga-168453586523972",
@@ -259,7 +295,11 @@
 		"sangar": 25,
 		"golvytaM2": 10,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 4006,
+		"avstandBadplatsGangM": 3953,
+		"avstandMataffarBilM": 6090,
+		"avstandMataffarGangM": 4956
 	},
 	{
 		"id": "scoutstuga-161833914349100",
@@ -286,7 +326,11 @@
 		"sangar": 29,
 		"golvytaM2": 8,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 1231,
+		"avstandBadplatsGangM": 984,
+		"avstandMataffarBilM": 1556,
+		"avstandMataffarGangM": 1594
 	},
 	{
 		"id": "scoutstuga-162023175666500",
@@ -312,7 +356,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 25,
 		"el": true,
-		"vatten": false
+		"vatten": false,
+		"avstandBadplatsBilM": 1265,
+		"avstandBadplatsGangM": 1993,
+		"avstandMataffarBilM": 1590,
+		"avstandMataffarGangM": 2353
 	},
 	{
 		"id": "scoutstuga-163544781234620",
@@ -339,7 +387,11 @@
 		"sangar": 8,
 		"golvytaM2": 42,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 3052,
+		"avstandBadplatsGangM": 2248,
+		"avstandMataffarBilM": 3260,
+		"avstandMataffarGangM": 2925
 	},
 	{
 		"id": "scoutstuga-162089809180500",
@@ -365,7 +417,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"sangar": 38,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 10040,
+		"avstandBadplatsGangM": 5400,
+		"avstandMataffarBilM": 5912,
+		"avstandMataffarGangM": 5496
 	},
 	{
 		"id": "scoutstuga-171568106830185",
@@ -392,7 +448,11 @@
 		"sangar": 8,
 		"golvytaM2": 2,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 358,
+		"avstandBadplatsGangM": 562,
+		"avstandMataffarBilM": 1148,
+		"avstandMataffarGangM": 1056
 	},
 	{
 		"id": "scoutstuga-162023171564700",
@@ -418,7 +478,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 20,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 270,
+		"avstandBadplatsGangM": 315,
+		"avstandMataffarBilM": 1344,
+		"avstandMataffarGangM": 1246
 	},
 	{
 		"id": "scoutstuga-162025170798100",
@@ -445,7 +509,11 @@
 		"sangar": 25,
 		"golvytaM2": 50,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 267,
+		"avstandBadplatsGangM": 267,
+		"avstandMataffarBilM": 14871,
+		"avstandMataffarGangM": 14656
 	},
 	{
 		"id": "scoutstuga-164624340423679",
@@ -471,7 +539,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 20,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 10667,
+		"avstandBadplatsGangM": 8548,
+		"avstandMataffarBilM": 2650,
+		"avstandMataffarGangM": 2646
 	},
 	{
 		"id": "scoutstuga-164624408484791",
@@ -497,7 +569,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 20,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 10667,
+		"avstandBadplatsGangM": 8548,
+		"avstandMataffarBilM": 2650,
+		"avstandMataffarGangM": 2646
 	},
 	{
 		"id": "scoutstuga-163640290351256",
@@ -523,7 +599,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 30,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 4789,
+		"avstandBadplatsGangM": 4997,
+		"avstandMataffarBilM": 3088,
+		"avstandMataffarGangM": 3510
 	},
 	{
 		"id": "scoutstuga-164210851392370",
@@ -550,7 +630,11 @@
 		"sangar": 32,
 		"golvytaM2": 32,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 17297,
+		"avstandBadplatsGangM": 5814,
+		"avstandMataffarBilM": 8541,
+		"avstandMataffarGangM": 7050
 	},
 	{
 		"id": "scoutstuga-170897657036326",
@@ -576,7 +660,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 30,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 11518,
+		"avstandBadplatsGangM": 9964,
+		"avstandMataffarBilM": 13476,
+		"avstandMataffarGangM": 12413
 	},
 	{
 		"id": "scoutstuga-164176226860567",
@@ -602,7 +690,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"sangar": 68,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 11506,
+		"avstandBadplatsGangM": 11018,
+		"avstandMataffarBilM": 5633,
+		"avstandMataffarGangM": 5348
 	},
 	{
 		"id": "scoutstuga-164806873446087",
@@ -628,7 +720,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 50,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 5115,
+		"avstandBadplatsGangM": 4612,
+		"avstandMataffarBilM": 2002,
+		"avstandMataffarGangM": 2049
 	},
 	{
 		"id": "scoutstuga-168000321023852",
@@ -654,7 +750,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 20,
 		"el": true,
-		"vatten": false
+		"vatten": false,
+		"avstandBadplatsBilM": 5618,
+		"avstandBadplatsGangM": 3398,
+		"avstandMataffarBilM": 5734,
+		"avstandMataffarGangM": 4439
 	},
 	{
 		"id": "scoutstuga-162022208689900",
@@ -680,7 +780,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 25,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 3800,
+		"avstandBadplatsGangM": 2676,
+		"avstandMataffarBilM": 1151,
+		"avstandMataffarGangM": 1133
 	},
 	{
 		"id": "scoutstuga-166548168802995",
@@ -706,7 +810,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 20,
 		"el": true,
-		"vatten": false
+		"vatten": false,
+		"avstandBadplatsBilM": 1129,
+		"avstandBadplatsGangM": 2206,
+		"avstandMataffarBilM": 5210,
+		"avstandMataffarGangM": 4532
 	},
 	{
 		"id": "scoutstuga-173779830879558",
@@ -733,7 +841,11 @@
 		"sangar": 9,
 		"golvytaM2": 60,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 390,
+		"avstandBadplatsGangM": 390,
+		"avstandMataffarBilM": 6057,
+		"avstandMataffarGangM": 5718
 	},
 	{
 		"id": "scoutstuga-161892412944000",
@@ -760,7 +872,11 @@
 		"sangar": 28,
 		"golvytaM2": 50,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 16409,
+		"avstandBadplatsGangM": 15230,
+		"avstandMataffarBilM": 10428,
+		"avstandMataffarGangM": 9275
 	},
 	{
 		"id": "scoutstuga-164157045089173",
@@ -786,7 +902,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 40,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 810,
+		"avstandBadplatsGangM": 643,
+		"avstandMataffarBilM": 678,
+		"avstandMataffarGangM": 512
 	},
 	{
 		"id": "scoutstuga-162022228014200",
@@ -812,7 +932,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 25,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 8944,
+		"avstandBadplatsGangM": 8207,
+		"avstandMataffarBilM": 985,
+		"avstandMataffarGangM": 871
 	},
 	{
 		"id": "scoutstuga-168674478683467",
@@ -839,7 +963,11 @@
 		"sangar": 12,
 		"golvytaM2": 40,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 6452,
+		"avstandBadplatsGangM": 5313,
+		"avstandMataffarBilM": 9182,
+		"avstandMataffarGangM": 7834
 	},
 	{
 		"id": "scoutstuga-16261777788590",
@@ -865,7 +993,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 50,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 973,
+		"avstandBadplatsGangM": 1349,
+		"avstandMataffarBilM": 3403,
+		"avstandMataffarGangM": 2053
 	},
 	{
 		"id": "scoutstuga-162387838998100",
@@ -891,7 +1023,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 30,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 8017,
+		"avstandBadplatsGangM": 7967,
+		"avstandMataffarBilM": 7429,
+		"avstandMataffarGangM": 7434
 	},
 	{
 		"id": "scoutstuga-163550520195973",
@@ -917,7 +1053,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 40,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 15176,
+		"avstandBadplatsGangM": 12397,
+		"avstandMataffarBilM": 1539,
+		"avstandMataffarGangM": 1121
 	},
 	{
 		"id": "scoutstuga-175740762266887",
@@ -944,7 +1084,11 @@
 		"sangar": 30,
 		"golvytaM2": 10,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 1236,
+		"avstandBadplatsGangM": 1296,
+		"avstandMataffarBilM": 2839,
+		"avstandMataffarGangM": 2772
 	},
 	{
 		"id": "scoutstuga-170940179063996",
@@ -970,7 +1114,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"sangar": 36,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 82,
+		"avstandBadplatsGangM": 622,
+		"avstandMataffarBilM": 6007,
+		"avstandMataffarGangM": 5283
 	},
 	{
 		"id": "scoutstuga-162023383422800",
@@ -997,7 +1145,11 @@
 		"sangar": 8,
 		"golvytaM2": 26,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 6930,
+		"avstandBadplatsGangM": 2717,
+		"avstandMataffarBilM": 13265,
+		"avstandMataffarGangM": 4990
 	},
 	{
 		"id": "scoutstuga-164243319478855",
@@ -1024,7 +1176,11 @@
 		"sangar": 30,
 		"golvytaM2": 20,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 4058,
+		"avstandBadplatsGangM": 4199,
+		"avstandMataffarBilM": 7222,
+		"avstandMataffarGangM": 7203
 	},
 	{
 		"id": "scoutstuga-162262806658500",
@@ -1050,7 +1206,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 30,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 7723,
+		"avstandBadplatsGangM": 7507,
+		"avstandMataffarBilM": 1072,
+		"avstandMataffarGangM": 886
 	},
 	{
 		"id": "scoutstuga-164284983738546",
@@ -1077,7 +1237,11 @@
 		"sangar": 2,
 		"golvytaM2": 33,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 1246,
+		"avstandBadplatsGangM": 1237,
+		"avstandMataffarBilM": 1698,
+		"avstandMataffarGangM": 1602
 	},
 	{
 		"id": "scoutstuga-164202188052452",
@@ -1104,7 +1268,11 @@
 		"sangar": 34,
 		"golvytaM2": 4,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 9380,
+		"avstandBadplatsGangM": 7609,
+		"avstandMataffarBilM": 10654,
+		"avstandMataffarGangM": 8455
 	},
 	{
 		"id": "scoutstuga-165390443042150",
@@ -1131,7 +1299,11 @@
 		"sangar": 29,
 		"golvytaM2": 11,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 13228,
+		"avstandBadplatsGangM": 12084,
+		"avstandMataffarBilM": 6420,
+		"avstandMataffarGangM": 6072
 	},
 	{
 		"id": "scoutstuga-172924299167390",
@@ -1157,7 +1329,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"sangar": 33,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 5075,
+		"avstandBadplatsGangM": 4491,
+		"avstandMataffarBilM": 7494,
+		"avstandMataffarGangM": 7524
 	},
 	{
 		"id": "scoutstuga-172924126549352",
@@ -1183,7 +1359,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"sangar": 26,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 4627,
+		"avstandBadplatsGangM": 4043,
+		"avstandMataffarBilM": 7929,
+		"avstandMataffarGangM": 7261
 	},
 	{
 		"id": "scoutstuga-17292446397392",
@@ -1208,7 +1388,11 @@
 		"bokningsKallaUrl": "www.lysestrand.se",
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 4846,
+		"avstandBadplatsGangM": 4263,
+		"avstandMataffarBilM": 8312,
+		"avstandMataffarGangM": 7481
 	},
 	{
 		"id": "scoutstuga-172924215080052",
@@ -1235,7 +1419,11 @@
 		"sangar": 8,
 		"golvytaM2": 2,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 4585,
+		"avstandBadplatsGangM": 4001,
+		"avstandMataffarBilM": 7887,
+		"avstandMataffarGangM": 7220
 	},
 	{
 		"id": "scoutstuga-162024561211500",
@@ -1261,7 +1449,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 50,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 3660,
+		"avstandBadplatsGangM": 3304,
+		"avstandMataffarBilM": 986,
+		"avstandMataffarGangM": 873
 	},
 	{
 		"id": "scoutstuga-167732109909043",
@@ -1287,7 +1479,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 40,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 11401,
+		"avstandBadplatsGangM": 7887,
+		"avstandMataffarBilM": 1679,
+		"avstandMataffarGangM": 1489
 	},
 	{
 		"id": "scoutstuga-163048735663386",
@@ -1313,7 +1509,11 @@
 		"sangar": 4,
 		"golvytaM2": 30,
 		"el": false,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 11383,
+		"avstandBadplatsGangM": 11890,
+		"avstandMataffarBilM": 4871,
+		"avstandMataffarGangM": 4905
 	},
 	{
 		"id": "scoutstuga-163164794588476",
@@ -1340,7 +1540,11 @@
 		"sangar": 12,
 		"golvytaM2": 10,
 		"el": false,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 4103,
+		"avstandBadplatsGangM": 4190,
+		"avstandMataffarBilM": 8826,
+		"avstandMataffarGangM": 6772
 	},
 	{
 		"id": "scoutstuga-175909139438712",
@@ -1366,7 +1570,11 @@
 		"sangar": 20,
 		"golvytaM2": 20,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 10653,
+		"avstandBadplatsGangM": 10598,
+		"avstandMataffarBilM": 4498,
+		"avstandMataffarGangM": 4185
 	},
 	{
 		"id": "scoutstuga-162022282073400",
@@ -1393,7 +1601,11 @@
 		"sangar": 10,
 		"golvytaM2": 15,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 679,
+		"avstandBadplatsGangM": 508,
+		"avstandMataffarBilM": 2672,
+		"avstandMataffarGangM": 2532
 	},
 	{
 		"id": "scoutstuga-163311098757132",
@@ -1420,7 +1632,11 @@
 		"sangar": 10,
 		"golvytaM2": 20,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 1711,
+		"avstandBadplatsGangM": 1523,
+		"avstandMataffarBilM": 813,
+		"avstandMataffarGangM": 890
 	},
 	{
 		"id": "scoutstuga-163282229205477",
@@ -1446,7 +1662,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 50,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 2728,
+		"avstandBadplatsGangM": 2229,
+		"avstandMataffarBilM": 1551,
+		"avstandMataffarGangM": 1148
 	},
 	{
 		"id": "scoutstuga-16853834511590",
@@ -1473,7 +1693,11 @@
 		"sangar": 42,
 		"golvytaM2": 6,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 5221,
+		"avstandBadplatsGangM": 4966,
+		"avstandMataffarBilM": 5025,
+		"avstandMataffarGangM": 4733
 	},
 	{
 		"id": "scoutstuga-172786960186251",
@@ -1500,7 +1724,11 @@
 		"sangar": 74,
 		"golvytaM2": 18,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 2137,
+		"avstandBadplatsGangM": 2025,
+		"avstandMataffarBilM": 8452,
+		"avstandMataffarGangM": 8303
 	},
 	{
 		"id": "scoutstuga-164822469565121",
@@ -1527,7 +1755,11 @@
 		"sangar": 10,
 		"golvytaM2": 80,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 16365,
+		"avstandBadplatsGangM": 14945,
+		"avstandMataffarBilM": 7105,
+		"avstandMataffarGangM": 6742
 	},
 	{
 		"id": "scoutstuga-162132588446300",
@@ -1554,7 +1786,11 @@
 		"sangar": 4,
 		"golvytaM2": 40,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 1626,
+		"avstandBadplatsGangM": 1626,
+		"avstandMataffarBilM": 5616,
+		"avstandMataffarGangM": 4873
 	},
 	{
 		"id": "scoutstuga-162024696834200",
@@ -1579,7 +1815,11 @@
 		"bokningsKallaUrl": "http://djupadal.nu",
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"el": false,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 14317,
+		"avstandBadplatsGangM": 11779,
+		"avstandMataffarBilM": 8967,
+		"avstandMataffarGangM": 6688
 	},
 	{
 		"id": "scoutstuga-163544533649010",
@@ -1604,7 +1844,11 @@
 		"bokningsKallaUrl": "kragenas.scout.se",
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 387,
+		"avstandBadplatsGangM": 484,
+		"avstandMataffarBilM": 5740,
+		"avstandMataffarGangM": 5576
 	},
 	{
 		"id": "scoutstuga-1618417173632",
@@ -1631,7 +1875,11 @@
 		"sangar": 4,
 		"golvytaM2": 14,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 675,
+		"avstandBadplatsGangM": 198,
+		"avstandMataffarBilM": 6028,
+		"avstandMataffarGangM": 6004
 	},
 	{
 		"id": "scoutstuga-165988328421087",
@@ -1657,7 +1905,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"sangar": 35,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 15747,
+		"avstandBadplatsGangM": 15133,
+		"avstandMataffarBilM": 6136,
+		"avstandMataffarGangM": 6136
 	},
 	{
 		"id": "scoutstuga-162028143480200",
@@ -1684,7 +1936,11 @@
 		"sangar": 8,
 		"golvytaM2": 20,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 19327,
+		"avstandBadplatsGangM": 16050,
+		"avstandMataffarBilM": 2283,
+		"avstandMataffarGangM": 2283
 	},
 	{
 		"id": "scoutstuga-167767777557164",
@@ -1710,7 +1966,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"sangar": 110,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 414,
+		"avstandBadplatsGangM": 705,
+		"avstandMataffarBilM": 5259,
+		"avstandMataffarGangM": 4882
 	},
 	{
 		"id": "scoutstuga-167767955442245",
@@ -1735,7 +1995,11 @@
 		"bokningsKallaUrl": "https://sparreviken.se/uthyrning/prarien/",
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 521,
+		"avstandBadplatsGangM": 688,
+		"avstandMataffarBilM": 5951,
+		"avstandMataffarGangM": 5501
 	},
 	{
 		"id": "scoutstuga-166740221500632",
@@ -1761,7 +2025,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 20,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 2059,
+		"avstandBadplatsGangM": 1980,
+		"avstandMataffarBilM": 10578,
+		"avstandMataffarGangM": 9982
 	},
 	{
 		"id": "scoutstuga-162075390632100",
@@ -1787,7 +2055,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 32,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 2666,
+		"avstandBadplatsGangM": 2290,
+		"avstandMataffarBilM": 886,
+		"avstandMataffarGangM": 731
 	},
 	{
 		"id": "scoutstuga-162197011726900",
@@ -1814,7 +2086,11 @@
 		"sangar": 8,
 		"golvytaM2": 15,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 8808,
+		"avstandBadplatsGangM": 8307,
+		"avstandMataffarBilM": 5672,
+		"avstandMataffarGangM": 4007
 	},
 	{
 		"id": "scoutstuga-164769231435355",
@@ -1840,7 +2116,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 50,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 2676,
+		"avstandBadplatsGangM": 2672,
+		"avstandMataffarBilM": 1117,
+		"avstandMataffarGangM": 1117
 	},
 	{
 		"id": "scoutstuga-162023229854100",
@@ -1866,7 +2146,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 24,
 		"el": true,
-		"vatten": false
+		"vatten": false,
+		"avstandBadplatsBilM": 10245,
+		"avstandBadplatsGangM": 9998,
+		"avstandMataffarBilM": 6325,
+		"avstandMataffarGangM": 5993
 	},
 	{
 		"id": "scoutstuga-17625323422793",
@@ -1892,7 +2176,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 42,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 5402,
+		"avstandBadplatsGangM": 4755,
+		"avstandMataffarBilM": 822,
+		"avstandMataffarGangM": 730
 	},
 	{
 		"id": "scoutstuga-164674167895672",
@@ -1918,7 +2206,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"sangar": 47,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 615,
+		"avstandBadplatsGangM": 1660,
+		"avstandMataffarBilM": 5654,
+		"avstandMataffarGangM": 5654
 	},
 	{
 		"id": "scoutstuga-173247787398076",
@@ -1945,7 +2237,11 @@
 		"sangar": 11,
 		"golvytaM2": 14,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 2532,
+		"avstandBadplatsGangM": 619,
+		"avstandMataffarBilM": 2588,
+		"avstandMataffarGangM": 1806
 	},
 	{
 		"id": "scoutstuga-161840206817400",
@@ -1971,7 +2267,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"sangar": 30,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 7105,
+		"avstandBadplatsGangM": 8872,
+		"avstandMataffarBilM": 1124,
+		"avstandMataffarGangM": 2936
 	},
 	{
 		"id": "scoutstuga-167585384574516",
@@ -1997,7 +2297,9 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"sangar": 32,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandMataffarBilM": 3004,
+		"avstandMataffarGangM": 4828
 	},
 	{
 		"id": "scoutstuga-164183397444260",
@@ -2024,7 +2326,11 @@
 		"sangar": 30,
 		"golvytaM2": 40,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 12232,
+		"avstandBadplatsGangM": 12314,
+		"avstandMataffarBilM": 8437,
+		"avstandMataffarGangM": 7863
 	},
 	{
 		"id": "scoutstuga-162022926825600",
@@ -2050,7 +2356,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 60,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 15107,
+		"avstandBadplatsGangM": 15189,
+		"avstandMataffarBilM": 11313,
+		"avstandMataffarGangM": 10738
 	},
 	{
 		"id": "scoutstuga-163455693812687",
@@ -2076,7 +2386,11 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"sangar": 25,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 1671,
+		"avstandBadplatsGangM": 1583,
+		"avstandMataffarBilM": 1514,
+		"avstandMataffarGangM": 1508
 	},
 	{
 		"id": "scoutstuga-164237053605393",
@@ -2102,6 +2416,10 @@
 		"bokningsKallaNotering": "Kontaktuppgifter från scoutstuga.se.",
 		"golvytaM2": 25,
 		"el": true,
-		"vatten": true
+		"vatten": true,
+		"avstandBadplatsBilM": 3190,
+		"avstandBadplatsGangM": 2521,
+		"avstandMataffarBilM": 1338,
+		"avstandMataffarGangM": 1090
 	}
 ]

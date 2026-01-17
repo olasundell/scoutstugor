@@ -25,6 +25,7 @@ type Args = {
 	retries: number;
 	overpassUrl?: string;
 	debug: boolean;
+	forceRecount: boolean;
 	osrmDrivingUrl: string;
 	osrmFootUrl: string;
 	osrmRetries: number;
@@ -45,6 +46,7 @@ function parseArgs(argv: string[]): Args {
 		sleepMs: 400,
 		retries: 3,
 		debug: false,
+		forceRecount: false,
 		osrmDrivingUrl: "http://localhost:5005",
 		osrmFootUrl: "http://localhost:5006",
 		osrmRetries: 2,
@@ -104,6 +106,10 @@ function parseArgs(argv: string[]): Args {
 		}
 		if (a === "--debug") {
 			args.debug = true;
+			continue;
+		}
+		if (a === "--force" || a === "--recount") {
+			args.forceRecount = true;
 			continue;
 		}
 		if (a === "--osrm-driving") {
@@ -422,6 +428,23 @@ for (const [index, dataPath] of dataPaths.entries()) {
 			continue;
 		}
 		const origin = { lat: stuga.latitud, lon: stuga.longitud };
+		const hasBadplatsBil = Number.isFinite(stuga.avstandBadplatsBilM);
+		const hasBadplatsGang = Number.isFinite(stuga.avstandBadplatsGangM);
+		const hasMataffarBil = Number.isFinite(stuga.avstandMataffarBilM);
+		const hasMataffarGang = Number.isFinite(stuga.avstandMataffarGangM);
+		const needsBadplatsBil = args.forceRecount || !hasBadplatsBil;
+		const needsBadplatsGang = args.forceRecount || !hasBadplatsGang;
+		const needsMataffarBil = args.forceRecount || !hasMataffarBil;
+		const needsMataffarGang = args.forceRecount || !hasMataffarGang;
+		const needsBadplats = needsBadplatsBil || needsBadplatsGang;
+		const needsMataffar = needsMataffarBil || needsMataffarGang;
+
+		if (!needsBadplats && !needsMataffar) {
+			if (args.debug) {
+				console.log(`${stuga.id}: avstånd finns redan, hoppar över`);
+			}
+			continue;
+		}
 
 		let badplatsPoints: LatLon[] = [];
 		let mataffarPoints: LatLon[] = [];
@@ -430,24 +453,28 @@ for (const [index, dataPath] of dataPaths.entries()) {
 			...overpassUrls.filter((u) => u !== baseOverpassUrl),
 		]) {
 			try {
-				badplatsPoints = await fetchOverpassPoints(
-					origin,
-					args.radiusM,
-					badplatsTags,
-					{
-						retries: args.retries,
-						baseUrl,
-					},
-				);
-				mataffarPoints = await fetchOverpassPoints(
-					origin,
-					args.radiusM,
-					mataffarTags,
-					{
-						retries: args.retries,
-						baseUrl,
-					},
-				);
+				if (needsBadplats) {
+					badplatsPoints = await fetchOverpassPoints(
+						origin,
+						args.radiusM,
+						badplatsTags,
+						{
+							retries: args.retries,
+							baseUrl,
+						},
+					);
+				}
+				if (needsMataffar) {
+					mataffarPoints = await fetchOverpassPoints(
+						origin,
+						args.radiusM,
+						mataffarTags,
+						{
+							retries: args.retries,
+							baseUrl,
+						},
+					);
+				}
 				break;
 			} catch (error) {
 				if (baseUrl === overpassUrls[overpassUrls.length - 1]) {
@@ -456,34 +483,42 @@ for (const [index, dataPath] of dataPaths.entries()) {
 			}
 		}
 
-		const badplatsDistanceBil = await nearestRoutingDistanceM(
-			origin,
-			badplatsPoints,
-			args.candidates,
-			args.osrmDrivingUrl,
-			"driving",
-		);
-		const badplatsDistanceGang = await nearestRoutingDistanceM(
-			origin,
-			badplatsPoints,
-			args.candidates,
-			args.osrmFootUrl,
-			"foot",
-		);
-		const mataffarDistanceBil = await nearestRoutingDistanceM(
-			origin,
-			mataffarPoints,
-			args.candidates,
-			args.osrmDrivingUrl,
-			"driving",
-		);
-		const mataffarDistanceGang = await nearestRoutingDistanceM(
-			origin,
-			mataffarPoints,
-			args.candidates,
-			args.osrmFootUrl,
-			"foot",
-		);
+		const badplatsDistanceBil = needsBadplatsBil
+			? await nearestRoutingDistanceM(
+					origin,
+					badplatsPoints,
+					args.candidates,
+					args.osrmDrivingUrl,
+					"driving",
+				)
+			: null;
+		const badplatsDistanceGang = needsBadplatsGang
+			? await nearestRoutingDistanceM(
+					origin,
+					badplatsPoints,
+					args.candidates,
+					args.osrmFootUrl,
+					"foot",
+				)
+			: null;
+		const mataffarDistanceBil = needsMataffarBil
+			? await nearestRoutingDistanceM(
+					origin,
+					mataffarPoints,
+					args.candidates,
+					args.osrmDrivingUrl,
+					"driving",
+				)
+			: null;
+		const mataffarDistanceGang = needsMataffarGang
+			? await nearestRoutingDistanceM(
+					origin,
+					mataffarPoints,
+					args.candidates,
+					args.osrmFootUrl,
+					"foot",
+				)
+			: null;
 
 		if (typeof badplatsDistanceBil === "number")
 			stuga.avstandBadplatsBilM = Math.round(badplatsDistanceBil);
